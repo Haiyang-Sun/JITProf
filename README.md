@@ -40,7 +40,6 @@ in the pyOpenSSL-0.14 directory, run the following command to install the new ve
 sudo python setup.py install --user
 ```
 
-
 ### Install mitmproxy certificate
 Details can be found at this location:
 http://mitmproxy.org/doc/ssl.html
@@ -77,5 +76,15 @@ No go back to the jalangi2analyses directory:
 
 under directory ```exp/tmp```:
 ```
-../../../jalangi2/scripts/mitmproxywrapper.py --cert=`pwd`/../../../jalangi2/cert.pem -t -q --anticache -s "../../../jalangi2/scripts/proxy.py ../../../jalangi2/src/js/sample_analyses/ChainedAnalyses.js ../../src/js/analyses/jitprof/utils/Utils.js ../../src/js/analyses/jitprof/utils/RuntimeDB.js ../../src/js/analyses/jitprof/TrackHiddenClass  ../../src/js/analyses/jitprof/AccessUndefArrayElem.js ../../src/js/analyses/jitprof/SwitchArrayType.js"
+../../../jalangi2/scripts/mitmproxywrapper.py --cert=`pwd`/../../../jalangi2/cert.pem -t -q --anticache -s "../../../jalangi2/scripts/proxy.py ../../../jalangi2/src/js/sample_analyses/ChainedAnalyses.js ../../src/js/analyses/jitprof/utils/Utils.js ../../src/js/analyses/jitprof/utils/RuntimeDB.js ../../src/js/analyses/jitprof/TrackHiddenClass.js  ../../src/js/analyses/jitprof/AccessUndefArrayElem.js ../../src/js/analyses/jitprof/SwitchArrayType.js"
+```
+
+After chaning the analysis configuration, remember to clear cashed files under ```exp/tmp```.
+
+
+### Collect data of instrumentation overhead
+
+```
+./exp/experiment.sh
+node ./exp/stat.js result.txt result.csv
 ```
