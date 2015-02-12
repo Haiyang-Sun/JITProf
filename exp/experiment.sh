@@ -35,9 +35,10 @@
 rm result.bak.txt;
 mv result.txt result.bak.txt;
 
-# f arg1 arg2
-# arg1 -> name of dataset
-# arg2 -> location
+# procedure that collects results and timing on one bechmark
+# f: arg1 -> arg2
+# arg1: name of benchmark
+# arg2: location of benchmark
 runexp() {
     echo "$1"
     echo '[**name**]'"$1" >> result.txt
@@ -45,14 +46,17 @@ runexp() {
     echo '[****]loc: '`wc -l $2".js"` >> result.txt
 
 	# run analysis on the benchmark code
+	# get jitprof slowdown
 	# node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalyses.js --analysis src/js/analyses/jitprof/utils/Utils.js --analysis src/js/analyses/jitprof/utils/RuntimeDB.js --analysis src/js/analyses/jitprof/TrackHiddenClass --analysis src/js/analyses/jitprof/AccessUndefArrayElem --analysis src/js/analyses/jitprof/SwitchArrayType --analysis src/js/analyses/jitprof/NonContiguousArray --analysis src/js/analyses/jitprof/BinaryOpOnUndef --analysis src/js/analyses/jitprof/PolymorphicFunCall --analysis src/js/analyses/jitprof/TypedArray ../jalangi2/tests/octane/deltablue.js
 	( node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalyses.js --analysis src/js/analyses/jitprof/utils/Utils.js --analysis src/js/analyses/jitprof/utils/RuntimeDB.js --analysis src/js/analyses/jitprof/TrackHiddenClass --analysis src/js/analyses/jitprof/AccessUndefArrayElem --analysis src/js/analyses/jitprof/SwitchArrayType --analysis src/js/analyses/jitprof/NonContiguousArray --analysis src/js/analyses/jitprof/BinaryOpOnUndef --analysis src/js/analyses/jitprof/PolymorphicFunCall --analysis src/js/analyses/jitprof/TypedArray $2 ) >> result.txt
+
+	# get nop-analysis (template) slowdown
+	# node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalysesNoCheck.js --analysis ../jalangi2/src/js/runtime/analysisCallbackTemplate.js 
+	# ( node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalysesNoCheck.js --analysis ../jalangi2/src/js/runtime/analysisCallbackTemplate.js $2 ) >> result.txt
 
 	# run the benchmark code without instrumentation and analysis
 	( { time node "$2" | tee >(grep -Ei ".*" >> result.txt); } 2>&1 ) | { grep -Ei "^(real|user|sys)" >> result.txt; }
 }
-
-
 
 : <<'END'
 END
@@ -66,7 +70,7 @@ runexp "Octane-Box2d" "../jalangi2/tests/octane/box2d"
 runexp "Octane-Code-Load" "../jalangi2/tests/octane/code-load"
 runexp "Octane-Gbemu" "../jalangi2/tests/octane/gbemu"
 runexp "Octane-Earley-Boyer" "../jalangi2/tests/octane/earley-boyer"
-runexp "Octane-Mandreel" "../jalangi2/tests/octane/mandreel"
+# runexp "Octane-Mandreel" "../jalangi2/tests/octane/mandreel"
 runexp "Octane-Navier-Stokes" "../jalangi2/tests/octane/navier-stokes"
 runexp "Octane-Pdfjs" "../jalangi2/tests/octane/pdfjs"
 runexp "Octane-Raytrace" "../jalangi2/tests/octane/raytrace"

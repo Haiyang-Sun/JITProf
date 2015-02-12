@@ -1,4 +1,4 @@
-This only works on MAC OS:
+This repository currently has been tested on Mac OS.
 
 ### Install
 
@@ -87,4 +87,12 @@ After chaning the analysis configuration, remember to clear cashed files under `
 ```
 ./exp/experiment.sh
 node ./exp/stat.js result.txt result.csv
+```
+
+### Run nop-analysis on Jalangi2
+
+Nop-analysis is the empty template. 
+
+```
+node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalysesNoCheck.js --analysis ../jalangi2/src/js/runtime/analysisCallbackTemplate.js tests/jitprof/JITAwareTest.js
 ```
