@@ -52,7 +52,7 @@
         var storeDB = new RuntimeDB();
 
         var warning_num = 0;
-        var MISS_THRESHOLD = 999;
+        var MISS_THRESHOLD = 0; // 999;
 
         // ---- Print functions start ----
 

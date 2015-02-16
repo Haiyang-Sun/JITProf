@@ -34,7 +34,7 @@
         var db = new RuntimeDB();
 
         var warning_limit = 30;
-        var ACCESS_THRESHOLD = 999;
+        var ACCESS_THRESHOLD = 0; // 999;
 
         // ---- JIT library functions start ----
 
