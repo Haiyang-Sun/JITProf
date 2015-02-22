@@ -89,6 +89,11 @@ After chaning the analysis configuration, remember to clear cashed files under `
 node ./exp/stat.js result.txt result.csv
 ```
 
+If sampling mechanism is deployed, generate the sampling array first:
+```
+node exp/getSampleArray.js
+```
+
 ### Run nop-analysis on Jalangi2
 
 Nop-analysis is the empty template. 

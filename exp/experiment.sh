@@ -51,8 +51,8 @@ runexp() {
 	( node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalyses.js --analysis src/js/analyses/jitprof/utils/Utils.js --analysis src/js/analyses/jitprof/utils/RuntimeDB.js --analysis src/js/analyses/jitprof/TrackHiddenClass.js --analysis src/js/analyses/jitprof/AccessUndefArrayElem.js --analysis src/js/analyses/jitprof/SwitchArrayType.js --analysis src/js/analyses/jitprof/NonContiguousArray.js --analysis src/js/analyses/jitprof/BinaryOpOnUndef.js --analysis src/js/analyses/jitprof/PolymorphicFunCall.js --analysis src/js/analyses/jitprof/TypedArray.js $2 ) >> result.txt
 
 	# get nop-analysis (template) slowdown
-	# node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalysesNoCheck.js --analysis ../jalangi2/src/js/runtime/analysisCallbackTemplate.js 
-	# ( node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalysesNoCheck.js --analysis ../jalangi2/src/js/runtime/analysisCallbackTemplate.js $2 ) >> result.txt
+	# node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/runtime/analysisCallbackTemplate.js 
+	# ( node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/runtime/analysisCallbackTemplate.js $2 ) >> result.txt
 
 	# get jalangi2 slowdown (without any analysis)
 	# node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource
@@ -76,7 +76,7 @@ runexp "Octane-Gbemu" "../jalangi2/tests/octane/gbemu"
 runexp "Octane-Earley-Boyer" "../jalangi2/tests/octane/earley-boyer"
 # runexp "Octane-Mandreel" "../jalangi2/tests/octane/mandreel"
 runexp "Octane-Navier-Stokes" "../jalangi2/tests/octane/navier-stokes"
-# runexp "Octane-Pdfjs" "../jalangi2/tests/octane/pdfjs"
+runexp "Octane-Pdfjs" "../jalangi2/tests/octane/pdfjs"
 runexp "Octane-Raytrace" "../jalangi2/tests/octane/raytrace"
 runexp "Octane-Regexp" "../jalangi2/tests/octane/regexp"
 runexp "Octane-Typescript" "../jalangi2/tests/octane/typescript"
@@ -102,11 +102,11 @@ runexp "SunSpider-Date-Format-Xparb" "../jalangi2/tests/sunspider1/date-format-x
 runexp "SunSpider-Math-Cordic" "../jalangi2/tests/sunspider1/math-cordic"
 runexp "SunSpider-Math-Partial-Sums" "../jalangi2/tests/sunspider1/math-partial-sums"
 runexp "SunSpider-Math-Spectral-Norm" "../jalangi2/tests/sunspider1/math-spectral-norm"
-# runexp "SunSpider-Regexp-DNA" "../jalangi2/tests/sunspider1/regexp-dna"
+runexp "SunSpider-Regexp-DNA" "../jalangi2/tests/sunspider1/regexp-dna"
 runexp "SunSpider-String-Base64" "../jalangi2/tests/sunspider1/string-base64"
 runexp "SunSpider-String-Fasta" "../jalangi2/tests/sunspider1/string-fasta"
 runexp "SunSpider-String-Tagcloud" "../jalangi2/tests/sunspider1/string-tagcloud"
 runexp "SunSpider-String-Unpack-Code" "../jalangi2/tests/sunspider1/string-unpack-code"
-# runexp "SunSpider-String-Validate-Input" "../jalangi2/tests/sunspider1/string-validate-input"
+runexp "SunSpider-String-Validate-Input" "../jalangi2/tests/sunspider1/string-validate-input"
 
 echo '[*]exp-done' >> result.txt
