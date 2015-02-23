@@ -30,27 +30,33 @@
 // Author: Liang Gong
 
 /*
-	This is a random array generator
+	This is a module to calculate running time of a specified script.
 */
 
-(function () {
-	var fs = require('fs');
-	// 10% sampling rate
-	var random_sampling_rate = 0.1;
-	var sample_array_len = 100000;
-	var sample_count_array = [];
-	var count = 1;
-	for (var i=0;i<sample_array_len;i++) {
-		if(Math.random() < random_sampling_rate) {
-			sample_count_array.push(count);
-			count = 1;
-		} else {
-			count++;
-		}
+(function() {
+	var args = process.argv.slice(2);
+	var fileLocation = args[0];
+	var path = require('path');
+	var fileLocation = path.resolve(process.cwd() + '/' + fileLocation);
+	console.log('----------------------------');
+	var startTime = new Date();
+	try {
+		require(fileLocation);
+	} catch (e) {
+		console.log(e);
+	} finally {
+		var endTime = new Date();
+		/* sample output:
+real	0m0.046s
+user	0m0.037s
+sys	0m0.011s
+		*/
+		var timeDiff = (endTime - startTime) / 1000;
+		var seconds = timeDiff % 60;
+		var minutes = (timeDiff - seconds) / 60;
+		var resultStr = minutes + 'm' + (seconds + 0.000001) + 's';
+		console.log('real\t' + resultStr);
+		console.log('user\t' + resultStr);
+		console.log('sys\t' + resultStr);
 	}
-	//console.log(sample_count_array);
-	console.log('Total Number of Counts: ' + sample_count_array.length);
-	var fileLocation = '../jalangi2/src/js/runtime/sample_' + random_sampling_rate + '.json';
-	fs.writeFileSync(fileLocation, JSON.stringify(sample_count_array));
-	console.log('Sample array json file has been saved to: ' + fileLocation);
 })();

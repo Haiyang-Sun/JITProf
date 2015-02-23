@@ -45,21 +45,29 @@ runexp() {
 
     echo '[****]loc: '`wc -l $2".js"` >> result.txt
 
+    echo "instrumenting program:" "$2".js
+    # first instrument the code
+    # node ../jalangi2/src/js/commands/esnstrument_cli.js "$2".js
+	node ../jalangi2/src/js/commands/esnstrument_cli.js ../jalangi2/tests/octane/splay.js
+
+	echo "start running..."
 	# run analysis on the benchmark code
 	# get jitprof slowdown
 	# node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalyses.js --analysis src/js/analyses/jitprof/utils/Utils.js --analysis src/js/analyses/jitprof/utils/RuntimeDB.js --analysis src/js/analyses/jitprof/TrackHiddenClass --analysis src/js/analyses/jitprof/AccessUndefArrayElem --analysis src/js/analyses/jitprof/SwitchArrayType --analysis src/js/analyses/jitprof/NonContiguousArray --analysis src/js/analyses/jitprof/BinaryOpOnUndef --analysis src/js/analyses/jitprof/PolymorphicFunCall --analysis src/js/analyses/jitprof/TypedArray ../jalangi2/tests/octane/deltablue.js
-	( node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalyses.js --analysis src/js/analyses/jitprof/utils/Utils.js --analysis src/js/analyses/jitprof/utils/RuntimeDB.js --analysis src/js/analyses/jitprof/TrackHiddenClass.js --analysis src/js/analyses/jitprof/AccessUndefArrayElem.js --analysis src/js/analyses/jitprof/SwitchArrayType.js --analysis src/js/analyses/jitprof/NonContiguousArray.js --analysis src/js/analyses/jitprof/BinaryOpOnUndef.js --analysis src/js/analyses/jitprof/PolymorphicFunCall.js --analysis src/js/analyses/jitprof/TypedArray.js $2 ) >> result.txt
+	# ( node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalyses.js --analysis src/js/analyses/jitprof/utils/Utils.js --analysis src/js/analyses/jitprof/utils/RuntimeDB.js --analysis src/js/analyses/jitprof/TrackHiddenClass.js --analysis src/js/analyses/jitprof/AccessUndefArrayElem.js --analysis src/js/analyses/jitprof/SwitchArrayType.js --analysis src/js/analyses/jitprof/NonContiguousArray.js --analysis src/js/analyses/jitprof/BinaryOpOnUndef.js --analysis src/js/analyses/jitprof/PolymorphicFunCall.js --analysis src/js/analyses/jitprof/TypedArray.js $2 ) >> result.txt
 
 	# get nop-analysis (template) slowdown
 	# node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/runtime/analysisCallbackTemplate.js 
 	# ( node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/runtime/analysisCallbackTemplate.js $2 ) >> result.txt
+	( node ../jalangi2/src/js/commands/direct.js --analysis ../jalangi2/src/js/runtime/analysisCallbackTemplate.js "$2"_jalangi_.js ) >> result.txt
 
 	# get jalangi2 slowdown (without any analysis)
 	# node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource
 	# ( node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource $2 ) >> result.txt
 
 	# run the benchmark code without instrumentation and analysis
-	( { time node "$2" | tee >(grep -Ei ".*" >> result.txt); } 2>&1 ) | { grep -Ei "^(real|user|sys)" >> result.txt; }
+	node src/js/timeNode.js "$2".js >> result.txt
+	# ( { time node "$2" | tee >(grep -Ei ".*" >> result.txt); } 2>&1 ) | { grep -Ei "^(real|user|sys)" >> result.txt; }
 }
 
 : <<'END'
