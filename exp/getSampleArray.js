@@ -36,7 +36,7 @@
 (function () {
 	// 10% sampling rate
 	var fs = require('fs');
-	var random_sampling_rate = 0.5;
+	var random_sampling_rate = 0.1;
 	var sample_array_len = 100000;
 	var sample_count_array = [];
 	var count = 1;
