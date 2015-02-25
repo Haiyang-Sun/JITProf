@@ -92,11 +92,11 @@ After the execution, there will be a ```result-nop-2.csv``` file which contains 
 
 The running time of the original time can be obtained by calculating ```runtime/slowdown``` in EXCEL table.
 
-##### More details of the configuration for this experiemnt:
+##### More details of the configuration for this experiment:
 
 The experimental configuration of this step is almost the same as that of Step 3, except the following: 
 
-As shown in ```dirRoot/jalangi2analyses/exp/patch/patch_for_nop_analysis.patch``` file:
+As shown in ```dirRoot/jalangi2analyses/exp/patch/patch_for_nop_analysis_sampling.patch``` file:
    
    * ```Config.ENABLE_SAMPLING``` is set to ```true```
    
