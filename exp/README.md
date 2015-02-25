@@ -79,7 +79,7 @@ git apply ../jalangi2analyses/exp/patch/patch_for_nop_analysis_sampling.patch
 cd ../jalangi2analyses
 ```
 
-##### Step 5: Collect data for the third
+##### Step 5: Collect data for the third column
 
 Now you are under the ```jalangi2analyses``` directory and ready to do the experiment:
 
