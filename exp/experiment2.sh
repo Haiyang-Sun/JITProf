@@ -42,7 +42,7 @@ runexp() {
     echo "instrumenting program:" "$2".js
     # first instrument the code
     # node ../jalangi2/src/js/commands/esnstrument_cli.js "$2".js
-	node ../jalangi2/src/js/commands/esnstrument_cli.js --inlineIID --inlineSource ../jalangi2/tests/octane_jalangi"$jalangi_ver"/splay.js
+	node ../jalangi2/src/js/commands/esnstrument_cli.js --inlineIID --inlineSource ../jalangi2/tests/octane_jalangi"$jalangi_ver"/"$1".js
 
 	echo "start running..."
 	# run analysis on the benchmark code

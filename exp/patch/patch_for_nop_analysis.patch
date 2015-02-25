@@ -1,0 +1,37 @@
+diff --git a/src/js/Config.js b/src/js/Config.js
+index 96838c0..960ebe8 100644
+--- a/src/js/Config.js
++++ b/src/js/Config.js
+@@ -50,5 +50,5 @@ if (typeof J$ === 'undefined') {
+ //    Config.INSTR_LITERAL = function(literal, ast) { return true;}; // literal gets some dummy value if the type is object, function, or array
+ //    Config.INSTR_CONDITIONAL = function(type, ast) { return true; }; // type could be "&&", "||", "switch", "other"
+ //    Config.INSTR_TRY_CATCH_ARGUMENTS = function(ast) {return false; }; // wrap function and script bodies with try catch block and use arguments in J$.Fe
+-    Config.INSTR_END_EXPRESSION = function(ast) {return true; }; // wrap function and script bodies with try catch block and use arguments in J$.Fe
++    Config.INSTR_END_EXPRESSION = function(ast) {return false; }; // wrap function and script bodies with try catch block and use arguments in J$.Fe
+ }(J$));
+diff --git a/src/js/commands/direct.js b/src/js/commands/direct.js
+index e9911c4..630e622 100644
+--- a/src/js/commands/direct.js
++++ b/src/js/commands/direct.js
+@@ -59,14 +59,20 @@ function runAnalysis(initParam) {
+ 
+     function startProgram() {
+         // hack process.argv for the child script
++        var startTime;
+         script = path.resolve(script);
+         var newArgs = [process.argv[0], script];
+         newArgs = newArgs.concat(args.script_and_args);
+         process.argv = newArgs;
+         // this assumes that the endExecution() callback of the analysis
+         // does not make any asynchronous calls
+-        process.on('exit', function () { J$.endExecution(); });
++        process.on('exit', function() {
++            J$.endExecution();
++            var endTime = Date.now();
++            console.error('[****]time: ' + ((endTime - startTime) / 1000) + 's');
++        });
+         var mod = require('module').Module;
++        startTime = Date.now();
+         mod.runMain(script, null, true);
+     }
+ 

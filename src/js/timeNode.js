@@ -30,33 +30,50 @@
 // Author: Liang Gong
 
 /*
-	This is a module to calculate running time of a specified script.
-*/
+ * This is a module to calculate running time of a specified script.
+ * usage:
+ * 		node timeNode program_path [program parameters]
+ */
 
 (function() {
-	var args = process.argv.slice(2);
-	var fileLocation = args[0];
+	if (process.argv.length < 3) {
+		console.log('usage:\n\tnode timeNode program_path [program parameters]\n');
+		process.exit(0);
+	}
+
 	var path = require('path');
-	var fileLocation = path.resolve(process.cwd() + '/' + fileLocation);
-	console.log('----------------------------');
-	var startTime = new Date();
+	// remove first two arguments: node timeNode
+	var args = process.argv.slice(2);
+	// get script path and remove script path from parameter array
+	var script = args.shift();
+	// if relative path
+	if (path.resolve(script) !== path.normalize(script)) {
+		script = path.resolve(process.cwd() + '/' + script);
+	}
+
 	try {
-		require(fileLocation);
+		var startTime;
+		// process.argv[0]: node
+		var newArgs = [process.argv[0], script];
+		// add program's command line parameters
+		newArgs = newArgs.concat(args);
+		process.argv = newArgs;
+		process.on('exit', function() {
+			var endTime = Date.now(); // end timer
+			// print timer in Linux command time format
+			var timeDiff = (endTime - startTime) / 1000;
+			var seconds = timeDiff % 60;
+			var minutes = (timeDiff - seconds) / 60;
+			var resultStr = minutes + 'm' + seconds + 's';
+			console.error();
+			console.error('real\t' + resultStr);
+			console.error('user\t' + resultStr);
+			console.error('sys\t' + resultStr);
+		});
+		var mod = require('module').Module;
+		startTime = Date.now(); // start timer
+		mod.runMain(script, null, true);
 	} catch (e) {
-		console.log(e);
-	} finally {
-		var endTime = new Date();
-		/* sample output:
-real	0m0.046s
-user	0m0.037s
-sys	0m0.011s
-		*/
-		var timeDiff = (endTime - startTime) / 1000;
-		var seconds = timeDiff % 60;
-		var minutes = (timeDiff - seconds) / 60;
-		var resultStr = minutes + 'm' + (seconds + 0.000001) + 's';
-		console.log('real\t' + resultStr);
-		console.log('user\t' + resultStr);
-		console.log('sys\t' + resultStr);
+		console.error(e);
 	}
 })();

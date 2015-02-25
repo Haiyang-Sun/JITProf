@@ -47,24 +47,18 @@ runexp() {
 
     echo "instrumenting program:" "$2".js
     # first instrument the code
-    # node ../jalangi2/src/js/commands/esnstrument_cli.js "$2".js
-	node ../jalangi2/src/js/commands/esnstrument_cli.js --inlineIID --inlineSource ../jalangi2/tests/octane_jalangi"$jalangi_ver"/splay.js
+    # node ../jalangi2/src/js/commands/esnstrument_cli.js --inlineIID ../jalangi2/tests/octane/splay.js
+	node ../jalangi2/src/js/commands/esnstrument_cli.js --inlineIID "$2".js
 
 	echo "start running..."
 	# run analysis on the benchmark code
 	# get jitprof slowdown
 	# node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalyses.js --analysis src/js/analyses/jitprof/utils/Utils.js --analysis src/js/analyses/jitprof/utils/RuntimeDB.js --analysis src/js/analyses/jitprof/TrackHiddenClass --analysis src/js/analyses/jitprof/AccessUndefArrayElem --analysis src/js/analyses/jitprof/SwitchArrayType --analysis src/js/analyses/jitprof/NonContiguousArray --analysis src/js/analyses/jitprof/BinaryOpOnUndef --analysis src/js/analyses/jitprof/PolymorphicFunCall --analysis src/js/analyses/jitprof/TypedArray ../jalangi2/tests/octane_jalangi"$jalangi_ver"/deltablue.js
 	# ( node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalyses.js --analysis src/js/analyses/jitprof/utils/Utils.js --analysis src/js/analyses/jitprof/utils/RuntimeDB.js --analysis src/js/analyses/jitprof/TrackHiddenClass.js --analysis src/js/analyses/jitprof/AccessUndefArrayElem.js --analysis src/js/analyses/jitprof/SwitchArrayType.js --analysis src/js/analyses/jitprof/NonContiguousArray.js --analysis src/js/analyses/jitprof/BinaryOpOnUndef.js --analysis src/js/analyses/jitprof/PolymorphicFunCall.js --analysis src/js/analyses/jitprof/TypedArray.js $2 ) >> result.txt
-	( node ../jalangi2/src/js/commands/direct.js --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalyses.js --analysis src/js/analyses/jitprof/utils/Utils.js --analysis src/js/analyses/jitprof/utils/RuntimeDB.js --analysis src/js/analyses/jitprof/TrackHiddenClass.js --analysis src/js/analyses/jitprof/AccessUndefArrayElem.js --analysis src/js/analyses/jitprof/SwitchArrayType.js --analysis src/js/analyses/jitprof/NonContiguousArray.js --analysis src/js/analyses/jitprof/BinaryOpOnUndef.js --analysis src/js/analyses/jitprof/PolymorphicFunCall.js --analysis src/js/analyses/jitprof/TypedArray.js "$2"_jalangi_.js ) 2>> result.txt
+	# ( node ../jalangi2/src/js/commands/direct.js --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalyses.js --analysis src/js/analyses/jitprof/utils/Utils.js --analysis src/js/analyses/jitprof/utils/RuntimeDB.js --analysis src/js/analyses/jitprof/TrackHiddenClass.js --analysis src/js/analyses/jitprof/AccessUndefArrayElem.js --analysis src/js/analyses/jitprof/SwitchArrayType.js --analysis src/js/analyses/jitprof/NonContiguousArray.js --analysis src/js/analyses/jitprof/BinaryOpOnUndef.js --analysis src/js/analyses/jitprof/PolymorphicFunCall.js --analysis src/js/analyses/jitprof/TypedArray.js "$2"_jalangi_.js ) 2>> result.txt
 
 	# get nop-analysis (template) slowdown
-	# node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/runtime/analysisCallbackTemplate.js 
-	# ( node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/runtime/analysisCallbackTemplate.js $2 ) >> result.txt
-	# ( node ../jalangi2/src/js/commands/direct.js --analysis ../jalangi2/src/js/runtime/analysisCallbackTemplate.js "$2"_jalangi_.js ) 2>> result.txt
-
-	# get jalangi2 slowdown (without any analysis)
-	# node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource
-	# ( node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource $2 ) >> result.txt
+	( node ../jalangi2/src/js/commands/direct.js --analysis ../jalangi2/src/js/runtime/analysisCallbackTemplate.js "$2"_jalangi_.js ) 2>> result.txt
 
 	# run the benchmark code without instrumentation and analysis
 	node src/js/timeNode.js "$2".js 2>> result.txt
@@ -74,50 +68,50 @@ runexp() {
 : <<'END'
 END
 
-jalangi_ver=2;
+jalangi_ver="";
 
 # Google Octane
-runexp "Octane-Splay" "../jalangi2/tests/octane_jalangi""$jalangi_ver""/splay"
-runexp "Octane-Richards" "../jalangi2/tests/octane_jalangi""$jalangi_ver""/richards"
-runexp "Octane-DeltaBlue" "../jalangi2/tests/octane_jalangi""$jalangi_ver""/deltablue"
-runexp "Octane-Crypto" "../jalangi2/tests/octane_jalangi""$jalangi_ver""/crypto"
-runexp "Octane-Box2d" "../jalangi2/tests/octane_jalangi""$jalangi_ver""/box2d"
-runexp "Octane-Code-Load" "../jalangi2/tests/octane_jalangi""$jalangi_ver""/code-load"
-runexp "Octane-Gbemu" "../jalangi2/tests/octane_jalangi""$jalangi_ver""/gbemu"
-runexp "Octane-Earley-Boyer" "../jalangi2/tests/octane_jalangi""$jalangi_ver""/earley-boyer"
-# runexp "Octane-Mandreel" "../jalangi2/tests/octane_jalangi""$jalangi_ver""/mandreel"
-runexp "Octane-Navier-Stokes" "../jalangi2/tests/octane_jalangi""$jalangi_ver""/navier-stokes"
-runexp "Octane-Pdfjs" "../jalangi2/tests/octane_jalangi""$jalangi_ver""/pdfjs"
-runexp "Octane-Raytrace" "../jalangi2/tests/octane_jalangi""$jalangi_ver""/raytrace"
-runexp "Octane-Regexp" "../jalangi2/tests/octane_jalangi""$jalangi_ver""/regexp"
-runexp "Octane-Typescript" "../jalangi2/tests/octane_jalangi""$jalangi_ver""/typescript"
+runexp "Octane-Splay" "../jalangi2/tests/octane""$jalangi_ver""/splay"
+runexp "Octane-Richards" "../jalangi2/tests/octane""$jalangi_ver""/richards"
+runexp "Octane-DeltaBlue" "../jalangi2/tests/octane""$jalangi_ver""/deltablue"
+runexp "Octane-Crypto" "../jalangi2/tests/octane""$jalangi_ver""/crypto"
+runexp "Octane-Box2d" "../jalangi2/tests/octane""$jalangi_ver""/box2d"
+runexp "Octane-Code-Load" "../jalangi2/tests/octane""$jalangi_ver""/code-load"
+runexp "Octane-Gbemu" "../jalangi2/tests/octane""$jalangi_ver""/gbemu"
+runexp "Octane-Earley-Boyer" "../jalangi2/tests/octane""$jalangi_ver""/earley-boyer"
+# runexp "Octane-Mandreel" "../jalangi2/tests/octane""$jalangi_ver""/mandreel"
+runexp "Octane-Navier-Stokes" "../jalangi2/tests/octane""$jalangi_ver""/navier-stokes"
+runexp "Octane-Pdfjs" "../jalangi2/tests/octane""$jalangi_ver""/pdfjs"
+runexp "Octane-Raytrace" "../jalangi2/tests/octane""$jalangi_ver""/raytrace"
+runexp "Octane-Regexp" "../jalangi2/tests/octane""$jalangi_ver""/regexp"
+runexp "Octane-Typescript" "../jalangi2/tests/octane""$jalangi_ver""/typescript"
 
 # SunSpider
-runexp "SunSpider-3d-Cube" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/3d-cube"
-runexp "SunSpider-3d-Morph" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/3d-morph"
-runexp "SunSpider-3d-Raytrace" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/3d-raytrace"
-runexp "SunSpider-Access-Binary-Trees" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/access-binary-trees"
-runexp "SunSpider-Access-Fannkuch" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/access-fannkuch"
-runexp "SunSpider-Access-Nbody" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/access-nbody"
-runexp "SunSpider-Access-Nsieve" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/access-nsieve"
-runexp "SunSpider-Bitops-3bit-Bits-in-Byte" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/bitops-3bit-bits-in-byte"
-runexp "SunSpider-Bitops-Bits-in-Byte" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/bitops-bits-in-byte"
-runexp "SunSpider-Bitops-Bitwise-And" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/bitops-bitwise-and"
-runexp "SunSpider-Bitops-Nsieve-Bits" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/bitops-nsieve-bits"
-runexp "SunSpider-Controlflow-Recursive" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/controlflow-recursive"
-runexp "SunSpider-Crypto-AES" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/crypto-aes"
-runexp "SunSpider-Crypto-MD5" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/crypto-md5"
-runexp "SunSpider-Crypto-SHA1" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/crypto-sha1"
-runexp "SunSpider-Date-Format-Tofte" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/date-format-tofte"
-runexp "SunSpider-Date-Format-Xparb" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/date-format-xparb"
-runexp "SunSpider-Math-Cordic" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/math-cordic"
-runexp "SunSpider-Math-Partial-Sums" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/math-partial-sums"
-runexp "SunSpider-Math-Spectral-Norm" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/math-spectral-norm"
-runexp "SunSpider-Regexp-DNA" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/regexp-dna"
-runexp "SunSpider-String-Base64" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/string-base64"
-runexp "SunSpider-String-Fasta" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/string-fasta"
-runexp "SunSpider-String-Tagcloud" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/string-tagcloud"
-runexp "SunSpider-String-Unpack-Code" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/string-unpack-code"
-runexp "SunSpider-String-Validate-Input" "../jalangi2/tests/sunspider1_jalangi""$jalangi_ver""/string-validate-input"
+runexp "SunSpider-3d-Cube" "../jalangi2/tests/sunspider1""$jalangi_ver""/3d-cube"
+runexp "SunSpider-3d-Morph" "../jalangi2/tests/sunspider1""$jalangi_ver""/3d-morph"
+runexp "SunSpider-3d-Raytrace" "../jalangi2/tests/sunspider1""$jalangi_ver""/3d-raytrace"
+runexp "SunSpider-Access-Binary-Trees" "../jalangi2/tests/sunspider1""$jalangi_ver""/access-binary-trees"
+runexp "SunSpider-Access-Fannkuch" "../jalangi2/tests/sunspider1""$jalangi_ver""/access-fannkuch"
+runexp "SunSpider-Access-Nbody" "../jalangi2/tests/sunspider1""$jalangi_ver""/access-nbody"
+runexp "SunSpider-Access-Nsieve" "../jalangi2/tests/sunspider1""$jalangi_ver""/access-nsieve"
+runexp "SunSpider-Bitops-3bit-Bits-in-Byte" "../jalangi2/tests/sunspider1""$jalangi_ver""/bitops-3bit-bits-in-byte"
+runexp "SunSpider-Bitops-Bits-in-Byte" "../jalangi2/tests/sunspider1""$jalangi_ver""/bitops-bits-in-byte"
+runexp "SunSpider-Bitops-Bitwise-And" "../jalangi2/tests/sunspider1""$jalangi_ver""/bitops-bitwise-and"
+runexp "SunSpider-Bitops-Nsieve-Bits" "../jalangi2/tests/sunspider1""$jalangi_ver""/bitops-nsieve-bits"
+runexp "SunSpider-Controlflow-Recursive" "../jalangi2/tests/sunspider1""$jalangi_ver""/controlflow-recursive"
+runexp "SunSpider-Crypto-AES" "../jalangi2/tests/sunspider1""$jalangi_ver""/crypto-aes"
+runexp "SunSpider-Crypto-MD5" "../jalangi2/tests/sunspider1""$jalangi_ver""/crypto-md5"
+runexp "SunSpider-Crypto-SHA1" "../jalangi2/tests/sunspider1""$jalangi_ver""/crypto-sha1"
+runexp "SunSpider-Date-Format-Tofte" "../jalangi2/tests/sunspider1""$jalangi_ver""/date-format-tofte"
+runexp "SunSpider-Date-Format-Xparb" "../jalangi2/tests/sunspider1""$jalangi_ver""/date-format-xparb"
+runexp "SunSpider-Math-Cordic" "../jalangi2/tests/sunspider1""$jalangi_ver""/math-cordic"
+runexp "SunSpider-Math-Partial-Sums" "../jalangi2/tests/sunspider1""$jalangi_ver""/math-partial-sums"
+runexp "SunSpider-Math-Spectral-Norm" "../jalangi2/tests/sunspider1""$jalangi_ver""/math-spectral-norm"
+runexp "SunSpider-Regexp-DNA" "../jalangi2/tests/sunspider1""$jalangi_ver""/regexp-dna"
+runexp "SunSpider-String-Base64" "../jalangi2/tests/sunspider1""$jalangi_ver""/string-base64"
+runexp "SunSpider-String-Fasta" "../jalangi2/tests/sunspider1""$jalangi_ver""/string-fasta"
+runexp "SunSpider-String-Tagcloud" "../jalangi2/tests/sunspider1""$jalangi_ver""/string-tagcloud"
+runexp "SunSpider-String-Unpack-Code" "../jalangi2/tests/sunspider1""$jalangi_ver""/string-unpack-code"
+runexp "SunSpider-String-Validate-Input" "../jalangi2/tests/sunspider1""$jalangi_ver""/string-validate-input"
 
 echo '[*]exp-done' >> result.txt
