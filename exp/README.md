@@ -28,7 +28,7 @@ To apply the patch, in the ```dirRoot``` directory (which contains both ```jalan
 
 ```
 cd jalangi2
-git apply ../jalang2analyses/exp/patch/patch_for_nop_analysis.patch
+git apply ../jalangi2analyses/exp/patch/patch_for_nop_analysis.patch
 cd ../jalangi2analyses
 ```
 
@@ -45,15 +45,15 @@ After the execution, there will be a ```result-nop-1.csv``` file which contains 
 
 The running time of the original time can be obtained by calculating ```runtime/slowdown``` in EXCEL table.
 
-##### More details of the configuration for this experiemnt:
+##### More details of the configuration for this experiment:
 
-As shown in ```dirRoot/jalang2analyses/exp/patch/patch_for_nop_analysis.patch``` file:
+As shown in ```dirRoot/jalangi2analyses/exp/patch/patch_for_nop_analysis.patch``` file:
    
    * ```Config.INSTR_END_EXPRESSION``` always returns ```false```
    * ```Config.ENABLE_SAMPLING``` is set to ```false```
    * The original running time and instrumented program running time are collected using JavaScript ```Date.now()``` API.
 
-As shown in ```dirRoot/jalang2analyses/exp/experiment.sh``` file:
+As shown in ```dirRoot/jalangi2analyses/exp/experiment.sh``` file:
 
    * The command line for instrument (say) ```splay.js``` is:
    ```
@@ -75,11 +75,11 @@ To apply the patch, in the ```dirRoot``` directory use the following command:
 ```
 cd jalangi2
 git stash
-git apply ../jalang2analyses/exp/patch/patch_for_nop_analysis_sampling.patch
+git apply ../jalangi2analyses/exp/patch/patch_for_nop_analysis_sampling.patch
 cd ../jalangi2analyses
 ```
 
-##### Step 5: Collect data for the third
+##### Step 5: Collect data for the third column
 
 Now you are under the ```jalangi2analyses``` directory and ready to do the experiment:
 
@@ -92,11 +92,11 @@ After the execution, there will be a ```result-nop-2.csv``` file which contains 
 
 The running time of the original time can be obtained by calculating ```runtime/slowdown``` in EXCEL table.
 
-##### More details of the configuration for this experiemnt:
+##### More details of the configuration for this experiment:
 
 The experimental configuration of this step is almost the same as that of Step 3, except the following: 
 
-As shown in ```dirRoot/jalang2analyses/exp/patch/patch_for_nop_analysis.patch``` file:
+As shown in ```dirRoot/jalangi2analyses/exp/patch/patch_for_nop_analysis_sampling.patch``` file:
    
    * ```Config.ENABLE_SAMPLING``` is set to ```true```
    
