@@ -65,9 +65,29 @@ Now you are good to go:
 
 ### Run JITProf on node.js
 
-The last argument specifies the target JavaScript program to be analysed.
 ```
-    node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalysesNoCheck.js --analysis src/js/analyses/jitprof/utils/Utils.js --analysis src/js/analyses/jitprof/utils/RuntimeDB.js --analysis src/js/analyses/jitprof/TrackHiddenClass.js  --analysis src/js/analyses/jitprof/AccessUndefArrayElem.js --analysis src/js/analyses/jitprof/SwitchArrayType.js --analysis src/js/analyses/jitprof/NonContiguousArray.js --analysis src/js/analyses/jitprof/BinaryOpOnUndef.js --analysis src/js/analyses/jitprof/PolymorphicFunCall.js --analysis src/js/analyses/jitprof/TypedArray.js tests/jitprof/JITAwareTest
+./script/jitprof.sh <js program relative path without .js suffix>
+```
+
+Example:
+
+```
+./script/jitprof.sh tests/jitprof/JITAwareTest
+```
+
+### Run JITProf on node.js with sampling
+
+** Warning: ** the following script will stash and apply a patch to the jalangi2 repository in the sibling directory of jitprof. Please make sure all changes in that Jalangi2 directory are properly saved.
+
+Run JITProf with random sampler (10% sampling rate):
+```
+./script/jitprof-sample.sh <js program relative path without .js suffix>
+```
+
+Example:
+
+```
+./script/jitprof-sample.sh tests/jitprof/JITAwareTest
 ```
 
 ### Run JITProf in Jalangi2 on Websites

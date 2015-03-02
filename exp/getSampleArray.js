@@ -50,7 +50,7 @@
 	}
 	//console.log(sample_count_array);
 	console.log('Total Number of Counts: ' + sample_count_array.length);
-	var fileLocation = '../jalangi2/src/js/runtime/sample_' + random_sampling_rate + '.json';
+	var fileLocation = 'src/js/analyses/jitprof/sampler/data/sample.json';
 	fs.writeFileSync(fileLocation, JSON.stringify(sample_count_array));
 	console.log('Sample array json file has been saved to: ' + fileLocation);
 })();

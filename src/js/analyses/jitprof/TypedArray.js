@@ -298,10 +298,6 @@
             }
         };
 
-        this.runInstrumentedFunctionBody = function (iid) {
-            return false;
-        }
-
         this.endExecution = function () {
             var failArraySource = [];
             var reportDB = {};
