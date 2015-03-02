@@ -77,7 +77,7 @@ Example:
 
 ### Run JITProf on node.js with sampling
 
-** Warning: ** the following script will stash and apply a patch to the jalangi2 repository in the sibling directory of jitprof. Please make sure all changes in that Jalangi2 directory are properly saved.
+**Warning:** the following script will stash and apply a patch to the jalangi2 repository in the sibling directory of jitprof. Please make sure all changes in that Jalangi2 directory are properly saved.
 
 Run JITProf with random sampler (10% sampling rate):
 ```
