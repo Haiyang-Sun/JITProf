@@ -81,9 +81,9 @@
 	var path = require('path');
 	var cwd = process.cwd();
 	// experiment configuration
-	var headers = ['jitprof w/o sampling runtime', 'jitprof random sampling runtime', 'jitprof decaying sampling runtime'];
-	var fileNamePrefixs = ['exp/hybrid_sampling_exp/result/result-jitprof-', 'exp/hybrid_sampling_exp/result/result-jitprof-rand-', 'exp/hybrid_sampling_exp/result/result-jitprof-decay-'];
-	var fileNameSuffixs = ['.csv', '.csv', '.csv'];
+	var headers = ['jitprof bybrid decaying sampling runtime'];
+	var fileNamePrefixs = ['exp/hybrid_sampling_exp/result/result-jitprof-hybrid-decay-'];
+	var fileNameSuffixs = ['.csv'];
 	var resultFile = 'exp/hybrid_sampling_exp/result/result-overall.csv'
 	// number of files in each category
 	var numFiles = 5;

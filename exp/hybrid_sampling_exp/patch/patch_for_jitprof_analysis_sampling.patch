@@ -234,10 +234,10 @@ index 6909a04..f94c688 100755
  
  function sieve() {
 diff --git a/tests/sunspider1/controlflow-recursive.js b/tests/sunspider1/controlflow-recursive.js
-index ac09004..3230751 100755
+index ac09004..39948a6 100755
 --- a/tests/sunspider1/controlflow-recursive.js
 +++ b/tests/sunspider1/controlflow-recursive.js
-@@ -19,7 +19,7 @@ function tak(x,y,z) {
+@@ -19,7 +19,10 @@ function tak(x,y,z) {
  }
  
  for ( var i = 3; i <= 5; i++ ) {
@@ -247,6 +247,9 @@ index ac09004..3230751 100755
 +    // console.log(ack(3,i));
 +    // console.log(fib(17.0+i));
 +    // console.log(tak(3*i+3,2*i+2,i+1));
++    ack(3,i);
++    fib(17.0+i);
++    tak(3*i+3,2*i+2,i+1);
  }
 diff --git a/tests/sunspider1/crypto-aes.js b/tests/sunspider1/crypto-aes.js
 index 3495889..b0913be 100755
