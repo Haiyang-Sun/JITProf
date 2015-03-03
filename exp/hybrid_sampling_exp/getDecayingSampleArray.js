@@ -49,7 +49,7 @@
 			sample_count_array.push(count);
 			count = 1;
 			sample_num++;
-			random_sampling_rate = 1/(sample_num + 1);
+			random_sampling_rate = 1/(5 * sample_num + 1);
 		} else {
 			count++;
 		}

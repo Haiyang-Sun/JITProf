@@ -52,8 +52,9 @@ for i in `seq 1 $rounds`;
 		# generate random array
 		node exp/hybrid_sampling_exp/getDecayingSampleArray.js
 		cp exp/hybrid_sampling_exp/patch/sample_decay.json ../jalangi2/src/js/runtime/sample_decay.json
-		# collect data for all benchmarks (function level using decaying sampling)
+		# run benchmarks with analysis (instruction level using decaying sampling, function level using decaying sampling)
 		./exp/hybrid_sampling_exp/experiment.sh decay
+		# collect LOC, running time and slowdown
 		node ./exp/hybrid_sampling_exp/stat.js result.txt exp/hybrid_sampling_exp/result/result-jitprof-hybrid-decay-"$i".csv
 		# collect warning preservation information
 		node exp/hybrid_sampling_exp/warningMatcher.js result.txt > exp/hybrid_sampling_exp/result/result-jitprof-hybrid-decay-"$i".json
