@@ -32,9 +32,8 @@
 # author: Liang Gong
 
 # $0 is the name of the command
-# $1 first parameter
-# $2 second parameter
-# $3 third parameter etc. etc
+# $1 first parameter: sampler's name
+# $2 second parameter: relative path of targe program without .js suffix
 # $# total number of parameters
 # $@ all the parameters will be listed
 
@@ -44,11 +43,11 @@ git apply ../jalangi2analyses/exp/patch/patch_for_nop_analysis_sampling.patch
 cd ../jalangi2analyses/
 
 # instrument code
-echo "instrumenting ""$1".js"..."
-node ../jalangi2/src/js/commands/esnstrument_cli.js --inlineIID "$1".js
+echo "instrumenting ""$2".js"..."
+node ../jalangi2/src/js/commands/esnstrument_cli.js --inlineIID "$2".js
 # run JITProf with sampling
 echo "analyzing with JITProf..."
-node ../jalangi2/src/js/commands/direct.js --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalysesNoCheck.js --analysis src/js/analyses/jitprof/utils/Utils.js --analysis src/js/analyses/jitprof/utils/RuntimeDB.js --analysis src/js/analyses/jitprof/TrackHiddenClass.js  --analysis src/js/analyses/jitprof/AccessUndefArrayElem.js --analysis src/js/analyses/jitprof/SwitchArrayType.js --analysis src/js/analyses/jitprof/NonContiguousArray.js --analysis src/js/analyses/jitprof/BinaryOpOnUndef.js --analysis src/js/analyses/jitprof/PolymorphicFunCall.js --analysis src/js/analyses/jitprof/TypedArray.js --analysis src/js/analyses/jitprof/sampler/random.js  "$1"_jalangi_.js
+node ../jalangi2/src/js/commands/direct.js --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalysesNoCheck.js --analysis src/js/analyses/jitprof/utils/Utils.js --analysis src/js/analyses/jitprof/utils/RuntimeDB.js --analysis src/js/analyses/jitprof/TrackHiddenClass.js  --analysis src/js/analyses/jitprof/AccessUndefArrayElem.js --analysis src/js/analyses/jitprof/SwitchArrayType.js --analysis src/js/analyses/jitprof/NonContiguousArray.js --analysis src/js/analyses/jitprof/BinaryOpOnUndef.js --analysis src/js/analyses/jitprof/PolymorphicFunCall.js --analysis src/js/analyses/jitprof/TypedArray.js --analysis src/js/analyses/jitprof/sampler/"$1".js  "$2"_jalangi_.js
 
 # undo changes to jalangi2
 cd ../jalangi2/

@@ -1,0 +1,396 @@
+diff --git a/src/js/Config.js b/src/js/Config.js
+index 96838c0..164055d 100644
+--- a/src/js/Config.js
++++ b/src/js/Config.js
+@@ -39,7 +39,7 @@ if (typeof J$ === 'undefined') {
+     // In the following functions
+     // return true in a function, if you want the ast node (passed as the second argument) to be instrumented
+     // ast node gets instrumented if you do not define the corresponding function
+-    Config.ENABLE_SAMPLING = false;
++    Config.ENABLE_SAMPLING = true;
+ //    Config.INSTR_READ = function(name, ast) { return false; };
+ //    Config.INSTR_WRITE = function(name, ast) { return true; };
+ //    Config.INSTR_GETFIELD = function(offset, ast) { return true; }; // offset is null if the property is computed
+@@ -50,5 +50,5 @@ if (typeof J$ === 'undefined') {
+ //    Config.INSTR_LITERAL = function(literal, ast) { return true;}; // literal gets some dummy value if the type is object, function, or array
+ //    Config.INSTR_CONDITIONAL = function(type, ast) { return true; }; // type could be "&&", "||", "switch", "other"
+ //    Config.INSTR_TRY_CATCH_ARGUMENTS = function(ast) {return false; }; // wrap function and script bodies with try catch block and use arguments in J$.Fe
+-    Config.INSTR_END_EXPRESSION = function(ast) {return true; }; // wrap function and script bodies with try catch block and use arguments in J$.Fe
++    Config.INSTR_END_EXPRESSION = function(ast) {return false; }; // wrap function and script bodies with try catch block and use arguments in J$.Fe
+ }(J$));
+diff --git a/src/js/commands/direct.js b/src/js/commands/direct.js
+index e9911c4..630e622 100644
+--- a/src/js/commands/direct.js
++++ b/src/js/commands/direct.js
+@@ -59,14 +59,20 @@ function runAnalysis(initParam) {
+ 
+     function startProgram() {
+         // hack process.argv for the child script
++        var startTime;
+         script = path.resolve(script);
+         var newArgs = [process.argv[0], script];
+         newArgs = newArgs.concat(args.script_and_args);
+         process.argv = newArgs;
+         // this assumes that the endExecution() callback of the analysis
+         // does not make any asynchronous calls
+-        process.on('exit', function () { J$.endExecution(); });
++        process.on('exit', function() {
++            J$.endExecution();
++            var endTime = Date.now();
++            console.error('[****]time: ' + ((endTime - startTime) / 1000) + 's');
++        });
+         var mod = require('module').Module;
++        startTime = Date.now();
+         mod.runMain(script, null, true);
+     }
+ 
+diff --git a/tests/octane/index.html b/tests/octane/index.html
+index 294e643..cc2144e 100644
+--- a/tests/octane/index.html
++++ b/tests/octane/index.html
+@@ -43,13 +43,13 @@
+   }
+ 
+   function AddResult(name, result) {
+-    console.log(name + ': ' + result);
++    console.log((name + ': ' + result);
+     var box = document.getElementById("Result-" + name);
+     box.innerHTML = result;
+   }
+ 
+   function AddError(name, error) {
+-    console.log(error);
++    console.log((error);
+     if (error == "TypedArrayUnsupported") {
+       AddResult(name, '<b>Unsupported<\/b>');
+     } else {
+@@ -99,7 +99,7 @@
+         && typeof (new Uint8Array(0)).subarray != "undefined";
+ 
+     if (!hasTypedArrays) {
+-      console.log("Typed Arrays not supported");
++      console.log(("Typed Arrays not supported");
+       document.getElementById("alertbox").style.display="block";
+     }
+     if (window.document.URL.indexOf('auto=1') >= 0)
+diff --git a/tests/octane/pdfjs.js b/tests/octane/pdfjs.js
+index 16ee2f5..525e4b9 100644
+--- a/tests/octane/pdfjs.js
++++ b/tests/octane/pdfjs.js
+@@ -73,7 +73,7 @@ function tearDownPdfJS() {
+       var message = "PdfJS produced incorrect output: " +
+           "expected " + expected_length + " " + expected_hash + ", " +
+           "got " + log_length + " " + log_hash;
+-      console.log(message + "\n");
++      // console.log(message + "\n");
+       throw message;
+     }
+   }
+diff --git a/tests/octane/typescript-mod.js b/tests/octane/typescript-mod.js
+index 1df5d76..fd760a7 100644
+--- a/tests/octane/typescript-mod.js
++++ b/tests/octane/typescript-mod.js
+@@ -6607,7 +6607,7 @@ var TypeScript;
+         };
+         ErrorReporter.prototype.emitterError = function (ast, message) {
+             this.reportError(ast, message);
+-          console.log(message);
++            // console.log(message);
+             throw Error("EmitError");
+         };
+         ErrorReporter.prototype.duplicateIdentifier = function (ast, name) {
+diff --git a/tests/sunspider1/3d-cube.js b/tests/sunspider1/3d-cube.js
+index 027dfc3..44ebb60 100755
+--- a/tests/sunspider1/3d-cube.js
++++ b/tests/sunspider1/3d-cube.js
+@@ -63,8 +63,8 @@ function DrawLine(From, To) {
+     }
+     x += IncX2;
+     y += IncY2;
+-      console.log(x);
+-      console.log(y);
++      // console.log(x);
++      // console.log(y);
+   }
+   Q.LastPx = NumPix;
+ }
+diff --git a/tests/sunspider1/3d-morph.js b/tests/sunspider1/3d-morph.js
+index 9e81535..5186681 100755
+--- a/tests/sunspider1/3d-morph.js
++++ b/tests/sunspider1/3d-morph.js
+@@ -52,5 +52,5 @@ testOutput = 0;
+ for (var i = 0; i < nx; i++)
+     testOutput += a[3*(i*nx+i)+1];
+ a = null;
+-console.log(testOutput);
++// console.log(testOutput);
+ 
+diff --git a/tests/sunspider1/3d-raytrace.js b/tests/sunspider1/3d-raytrace.js
+index d2b6685..7bdf965 100755
+--- a/tests/sunspider1/3d-raytrace.js
++++ b/tests/sunspider1/3d-raytrace.js
+@@ -439,5 +439,5 @@ for (var y = 0; y < size; y++) {\n\
+ }
+ 
+ testOutput = arrayToCanvasCommands(raytraceScene());
+-console.log(testOutput);
++// console.log(testOutput);
+ 
+diff --git a/tests/sunspider1/access-binary-trees.js b/tests/sunspider1/access-binary-trees.js
+index 6809bd8..5e3107c 100755
+--- a/tests/sunspider1/access-binary-trees.js
++++ b/tests/sunspider1/access-binary-trees.js
+@@ -44,9 +44,9 @@ for ( var n = 4; n <= 7; n += 1 ) {
+             check += bottomUpTree(i,depth).itemCheck();
+             check += bottomUpTree(-i,depth).itemCheck();
+         }
+-        console.log(check);
++        // console.log(check);
+     }
+ 
+     ret = longLivedTree.itemCheck();
+-    console.log(ret);
++    // console.log(ret);
+ }
+diff --git a/tests/sunspider1/access-fannkuch.js b/tests/sunspider1/access-fannkuch.js
+index bb6eff2..53f029c 100755
+--- a/tests/sunspider1/access-fannkuch.js
++++ b/tests/sunspider1/access-fannkuch.js
+@@ -63,6 +63,6 @@ function fannkuch(n) {
+ 
+ var n = 8;
+ var ret = fannkuch(n);
+-console.log(ret);
++// console.log(ret);
+ 
+ 
+diff --git a/tests/sunspider1/access-nbody.js b/tests/sunspider1/access-nbody.js
+index 99c938c..fcc5c99 100755
+--- a/tests/sunspider1/access-nbody.js
++++ b/tests/sunspider1/access-nbody.js
+@@ -165,6 +165,6 @@ for ( var n = 3; n <= 24; n *= 2 ) {
+             bodies.advance(0.01);
+         }
+         ret = bodies.energy();
+-        console.log(ret);
++        // console.log(ret);
+     })();
+ }
+diff --git a/tests/sunspider1/access-nsieve.js b/tests/sunspider1/access-nsieve.js
+index 611f755..99e659b 100755
+--- a/tests/sunspider1/access-nsieve.js
++++ b/tests/sunspider1/access-nsieve.js
+@@ -24,7 +24,7 @@ function nsieve(m, isPrime){
+          count++;
+       }
+    }
+-    console.log(count);
++    // console.log(count);
+    return count;
+ }
+ 
+diff --git a/tests/sunspider1/bitops-3bit-bits-in-byte.js b/tests/sunspider1/bitops-3bit-bits-in-byte.js
+index ef5a388..e91838d 100755
+--- a/tests/sunspider1/bitops-3bit-bits-in-byte.js
++++ b/tests/sunspider1/bitops-3bit-bits-in-byte.js
+@@ -34,5 +34,5 @@ return sum;
+ }
+ 
+ sum = TimeFunc(fast3bitlookup);
+-console.log(sum);
++// console.log(sum);
+ 
+diff --git a/tests/sunspider1/bitops-bits-in-byte.js b/tests/sunspider1/bitops-bits-in-byte.js
+index e671dc3..9042120 100755
+--- a/tests/sunspider1/bitops-bits-in-byte.js
++++ b/tests/sunspider1/bitops-bits-in-byte.js
+@@ -23,4 +23,4 @@ return sum;
+ }
+ 
+ result = TimeFunc(bitsinbyte);
+-console.log(result);
++// console.log(result);
+diff --git a/tests/sunspider1/bitops-bitwise-and.js b/tests/sunspider1/bitops-bitwise-and.js
+index 0ff363c..03ba609 100755
+--- a/tests/sunspider1/bitops-bitwise-and.js
++++ b/tests/sunspider1/bitops-bitwise-and.js
+@@ -28,4 +28,4 @@ for (var i = 0; i < 600000; i++)
+     bitwiseAndValue = bitwiseAndValue & i;
+ 
+ var result = bitwiseAndValue;
+-console.log(result);
++// console.log(result);
+diff --git a/tests/sunspider1/bitops-nsieve-bits.js b/tests/sunspider1/bitops-nsieve-bits.js
+index 6909a04..f94c688 100755
+--- a/tests/sunspider1/bitops-nsieve-bits.js
++++ b/tests/sunspider1/bitops-nsieve-bits.js
+@@ -20,7 +20,7 @@ function primes(isPrime, n) {
+         isPrime[j>>5] &= ~(1<<(j&31));
+       count++;
+     }
+-    console.log(count);
++    // console.log(count);
+ }
+ 
+ function sieve() {
+diff --git a/tests/sunspider1/controlflow-recursive.js b/tests/sunspider1/controlflow-recursive.js
+index ac09004..3230751 100755
+--- a/tests/sunspider1/controlflow-recursive.js
++++ b/tests/sunspider1/controlflow-recursive.js
+@@ -19,7 +19,7 @@ function tak(x,y,z) {
+ }
+ 
+ for ( var i = 3; i <= 5; i++ ) {
+-    console.log(ack(3,i));
+-    console.log(fib(17.0+i));
+-    console.log(tak(3*i+3,2*i+2,i+1));
++    // console.log(ack(3,i));
++    // console.log(fib(17.0+i));
++    // console.log(tak(3*i+3,2*i+2,i+1));
+ }
+diff --git a/tests/sunspider1/crypto-aes.js b/tests/sunspider1/crypto-aes.js
+index 3495889..b0913be 100755
+--- a/tests/sunspider1/crypto-aes.js
++++ b/tests/sunspider1/crypto-aes.js
+@@ -420,6 +420,6 @@ And sails upon the bosom of the air.";
+ var password = "O Romeo, Romeo! wherefore art thou Romeo?";
+ 
+ var cipherText = AESEncryptCtr(plainText, password, 256);
+-console.log(cipherText);
++// console.log(cipherText);
+ var decryptedText = AESDecryptCtr(cipherText, password, 256);
+-console.log(decryptedText);
++// console.log(decryptedText);
+diff --git a/tests/sunspider1/crypto-md5.js b/tests/sunspider1/crypto-md5.js
+index fabd7dc..cfd0549 100755
+--- a/tests/sunspider1/crypto-md5.js
++++ b/tests/sunspider1/crypto-md5.js
+@@ -284,5 +284,5 @@ for (var i = 0; i <4; i++) {
+ }
+ 
+ var md5Output = hex_md5(plainText);
+-console.log(md5Output);
++// console.log(md5Output);
+ 
+diff --git a/tests/sunspider1/crypto-sha1.js b/tests/sunspider1/crypto-sha1.js
+index ac3b533..0ba1ee9 100755
+--- a/tests/sunspider1/crypto-sha1.js
++++ b/tests/sunspider1/crypto-sha1.js
+@@ -222,4 +222,4 @@ for (var i = 0; i <4; i++) {
+ }
+ 
+ var sha1Output = hex_sha1(plainText);
+-console.log(sha1Output);
++// console.log(sha1Output);
+diff --git a/tests/sunspider1/date-format-tofte.js b/tests/sunspider1/date-format-tofte.js
+index f97efa0..d6c8e92 100755
+--- a/tests/sunspider1/date-format-tofte.js
++++ b/tests/sunspider1/date-format-tofte.js
+@@ -295,6 +295,6 @@ for (i = 0; i < 500; ++i) {
+     var shortFormat = date.formatDate("Y-m-d");
+     var longFormat = date.formatDate("l, F d, Y g:i:s A");
+     date.setTime(date.getTime() + 84266956);
+-    //console.log(date.toUTCString());
++    //// console.log(date.toUTCString());
+ }
+ 
+diff --git a/tests/sunspider1/date-format-xparb.js b/tests/sunspider1/date-format-xparb.js
+index d6dd70b..b9c9969 100755
+--- a/tests/sunspider1/date-format-xparb.js
++++ b/tests/sunspider1/date-format-xparb.js
+@@ -414,5 +414,5 @@ for (i = 0; i < 4000; ++i) {
+     var shortFormat = date.dateFormat("Y-m-d");
+     var longFormat = date.dateFormat("l, F d, Y g:i:s A");
+     date.setTime(date.getTime() + 84266956);
+-    console.log(date.toUTCString());
++    // console.log(date.toUTCString());
+ }
+diff --git a/tests/sunspider1/math-cordic.js b/tests/sunspider1/math-cordic.js
+index 43674d8..d42681e 100755
+--- a/tests/sunspider1/math-cordic.js
++++ b/tests/sunspider1/math-cordic.js
+@@ -92,7 +92,7 @@ function cordic( runs ) {
+       total += cordicsincos(Target);
+   }
+ 
+-    console.log(total);
++    // console.log(total);
+   var end = new Date();
+ 
+   return end.getTime() - start.getTime();
+diff --git a/tests/sunspider1/math-spectral-norm.js b/tests/sunspider1/math-spectral-norm.js
+index cc7c65d..67201cd 100755
+--- a/tests/sunspider1/math-spectral-norm.js
++++ b/tests/sunspider1/math-spectral-norm.js
+@@ -47,5 +47,5 @@ function spectralnorm(n) {
+ }
+ 
+ for (var i = 6; i <= 48; i *= 2) {
+-    console.log(spectralnorm(i));
++    // console.log(spectralnorm(i));
+ }
+diff --git a/tests/sunspider1/regexp-dna.js b/tests/sunspider1/regexp-dna.js
+index cfa0a01..833a4fe 100755
+--- a/tests/sunspider1/regexp-dna.js
++++ b/tests/sunspider1/regexp-dna.js
+@@ -1710,5 +1710,5 @@ for(i in seqs)
+ for(k in subs)
+  dnaInput = dnaInput.replace(k, subs[k]) // FIXME: Would like this to be a global substitution in a future version of SunSpider.
+ 
+-console.log(dnaInput);
++// console.log(dnaInput);
+  // search string, replacement string, flags
+diff --git a/tests/sunspider1/string-base64.js b/tests/sunspider1/string-base64.js
+index b84c506..142e8b6 100755
+--- a/tests/sunspider1/string-base64.js
++++ b/tests/sunspider1/string-base64.js
+@@ -130,7 +130,7 @@ for ( var i = 8192; i <= 16384; i *= 2 ) {
+ 
+     // Double the string
+     str += str;
+-    console.log(str);
++    // console.log(str);
+ }
+ 
+ toBinaryTable = null;
+diff --git a/tests/sunspider1/string-fasta.js b/tests/sunspider1/string-fasta.js
+index 79bca8e..3c5d7a6 100755
+--- a/tests/sunspider1/string-fasta.js
++++ b/tests/sunspider1/string-fasta.js
+@@ -82,9 +82,9 @@ var ret;
+ 
+ var count = 7;
+ ret = fastaRepeat(2*count*100000, ALU);
+-console.log(ret);
++// console.log(ret);
+ ret = fastaRandom(3*count*1000, IUB);
+-console.log(ret);
++// console.log(ret);
+ ret = fastaRandom(5*count*1000, HomoSap);
+-console.log(ret);
++// console.log(ret);
+ 
+diff --git a/tests/sunspider1/string-tagcloud.js b/tests/sunspider1/string-tagcloud.js
+index 2430cbb..d9e53cf 100755
+--- a/tests/sunspider1/string-tagcloud.js
++++ b/tests/sunspider1/string-tagcloud.js
+@@ -262,5 +262,5 @@ function makeTagCloud(tagInfo)
+ }
+ 
+ var tagcloud = makeTagCloud(tagInfo);
+-console.log(tagcloud);
++// console.log(tagcloud);
+ tagInfo = null;
+diff --git a/tests/sunspider1/string-validate-input.js b/tests/sunspider1/string-validate-input.js
+index bf9c6d3..20781ff 100755
+--- a/tests/sunspider1/string-validate-input.js
++++ b/tests/sunspider1/string-validate-input.js
+@@ -84,7 +84,7 @@ function makeNumber(n)
+ function addResult(r)
+ {
+    endResult += "\n" + r;
+-    console.log(endResult);
++    // console.log(endResult);
+ }
+ 
+ doTest();

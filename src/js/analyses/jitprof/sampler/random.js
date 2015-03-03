@@ -16,7 +16,6 @@
 
 // Author: Liang Gong
 
-
 /**
  * random sampler
  */
@@ -42,7 +41,7 @@
             } else {
                 callAnalysis = false;
             }
-            return true;
+            return callAnalysis;
         };
     }
 

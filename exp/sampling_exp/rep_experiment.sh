@@ -31,14 +31,37 @@
 
 # author: Liang Gong
 
-# $0 is the name of the command
-# $1 first parameter: relative path of targe program without .js suffix
-# $# total number of parameters
-# $@ all the parameters will be listed
+rm -Rf exp/sampling_exp/result/*
+mkdir exp/sampling_exp/result
+# number of iterations for each experimental configuration
+rounds=5
 
-# instrument code
-echo "instrumenting ""$1".js"..."
-node ../jalangi2/src/js/commands/esnstrument_cli.js --inlineIID "$1".js
-# run JITProf with sampling
-echo "analyzing with JITProf..."
-node ../jalangi2/src/js/commands/direct.js --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalysesNoCheck.js --analysis src/js/analyses/jitprof/utils/Utils.js --analysis src/js/analyses/jitprof/utils/RuntimeDB.js --analysis src/js/analyses/jitprof/TrackHiddenClass.js  --analysis src/js/analyses/jitprof/AccessUndefArrayElem.js --analysis src/js/analyses/jitprof/SwitchArrayType.js --analysis src/js/analyses/jitprof/NonContiguousArray.js --analysis src/js/analyses/jitprof/BinaryOpOnUndef.js --analysis src/js/analyses/jitprof/PolymorphicFunCall.js --analysis src/js/analyses/jitprof/TypedArray.js --analysis src/js/analyses/jitprof/sampler/random.js  "$1"_jalangi_.js
+# apply jalangi2 change patch for non-sampling configuration
+cd ../jalangi2
+git stash  # undo applied patches
+git apply ../jalangi2analyses/exp/sampling_exp/patch/patch_for_jitprof_analysis.patch
+cd ../jalangi2analyses
+for i in `seq 1 $rounds`;
+	do
+		# collect data for all benchmarks
+		./exp/sampling_exp/experiment.sh non
+		node ./exp/sampling_exp/stat.js result.txt exp/sampling_exp/result/result-jitprof-"$i".csv
+    done 
+
+# apply jalangi2 change patch for sampling configuration
+cd ../jalangi2
+git stash  # undo applied patches
+git apply ../jalangi2analyses/exp/sampling_exp/patch/patch_for_jitprof_analysis_sampling.patch
+cd ../jalangi2analyses
+for i in `seq 1 $rounds`;
+	do
+		# collect data for all benchmarks
+		./exp/sampling_exp/experiment.sh random
+		node ./exp/sampling_exp/stat.js result.txt exp/sampling_exp/result/result-jitprof-rand-"$i".csv
+    done 
+
+# undo applied patches
+cd ../jalangi2
+git stash
+cd ../jalangi2analyses
+
