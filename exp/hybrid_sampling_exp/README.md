@@ -7,10 +7,11 @@ In the github root directory of this project, use the following command:
 ./exp/hybrid_sampling_exp/rep_experiment.sh
 ```
 
-Result will be saved to: ```exp/hybrid_sampling_exp/result``` directory, in which
-```result-jitprof-hybrid-decay-i.csv``` is the i-th iteration slowdown information,
-and ```result-jitprof-hybrid-decay-i.json``` contains all the preserved important JIT-unfriendly
-warnings in this round of experiment.
+Result will be saved to: ```exp/hybrid_sampling_exp/result``` directory, in which:
+
+ * ```result-jitprof-hybrid-decay-i.csv``` is the i-th iteration slowdown information
+ * ```result-jitprof-hybrid-decay-i.json``` contains all the preserved important JIT-unfriendly
+warnings in this round of experiment
 
 
 ##### Experiment Configuration
