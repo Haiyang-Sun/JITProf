@@ -38,9 +38,13 @@
 	// 10% sampling rate
 	var random_sampling_rate = 0.1;
 	var sample_array_len = 100000;
+	var minItems = 2000;
+	if(process.argv[2]) {
+		random_sampling_rate = parseFloat(process.argv[2]);
+	}
 	var sample_count_array = [];
 	var count = 1;
-	for (var i=0;i<sample_array_len;i++) {
+	for (var i=0;i<sample_array_len || sample_count_array.length < minItems;i++) {
 		if(Math.random() < random_sampling_rate) {
 			sample_count_array.push(count);
 			count = 1;
@@ -50,7 +54,7 @@
 	}
 	//console.log(sample_count_array);
 	console.log('Total Number of Counts: ' + sample_count_array.length);
-	var fileLocation = 'src/js/analyses/jitprof/sampler/data/sample.json';
+	var fileLocation = 'exp/fine_sampling_exp/patch/sample_0.1.json';
 	fs.writeFileSync(fileLocation, JSON.stringify(sample_count_array));
 	console.log('Sample array json file has been saved to: ' + fileLocation);
 })();

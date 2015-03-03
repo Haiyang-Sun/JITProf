@@ -168,14 +168,14 @@ if (typeof J$ === 'undefined') {
         
         // sample mechanism
         callAnalysis = true;
-        if(isSample) {
+        /* if(isSample) {
             if((--sampleCnt) <= 0) {
                 callAnalysis = true;
                 sampleCnt = sampleArray[(cntIndex++) % sampleArray.length];
             } else {
                 callAnalysis = false;
             }
-        }
+        }*/
         if (sandbox.analysis && sandbox.analysis.invokeFunPre && callAnalysis) {
             aret = sandbox.analysis.invokeFunPre(iid, f, base, args, isConstructor, isMethod);
             if (aret) {
@@ -237,14 +237,14 @@ if (typeof J$ === 'undefined') {
 
         // sample mechanism
         callAnalysis = true
-        if(isSample) {
+        /* if(isSample) {
             if((--sampleCnt) <= 0) {
                 callAnalysis = true;
                 sampleCnt = sampleArray[(cntIndex++) % sampleArray.length];
             } else {
                 callAnalysis = false;
             }
-        }
+        }*/
 
         if (sandbox.analysis && sandbox.analysis.literal && callAnalysis) {
             aret = sandbox.analysis.literal(iid, val, hasGetterSetter);
