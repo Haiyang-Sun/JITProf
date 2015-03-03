@@ -1,0 +1,14 @@
+{
+  "Octane-Splay": true,
+  "Octane-DeltaBlue": true,
+  "Octane-Crypto": true,
+  "Octane-RayTrace": true,
+  "SS-3d-Cube": true,
+  "SS-3d-Morph": true,
+  "SS-3d-Raytrace": true,
+  "SS-Access-Fannkuch": true,
+  "SS-Crypto-MD5": true,
+  "SS-Crypto-SHA1": true,
+  "SS-Format-Tofte": true,
+  "SS-Format-Xparb": true
+}
