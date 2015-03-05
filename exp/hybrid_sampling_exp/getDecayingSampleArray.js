@@ -38,7 +38,7 @@
 	// 10% sampling rate
 	var random_sampling_rate = 1;
 	var sample_array_len = 100000000;
-	var sample_count_array = []; //first gets ignored
+	var sample_count_array = [];
 	var count = 1;
 	var sample_num = 0;
 	var k = 20; // no sampling for the first 20 instances
