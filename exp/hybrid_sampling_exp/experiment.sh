@@ -32,8 +32,12 @@
 # author: Liang Gong
 
 # back up the preivous results
-rm result.bak.txt;
-mv result.txt result.bak.txt;
+rm result.txt
+rm result.bak.txt
+rm result.time.bak.txt;
+mv result.time.txt result.time.bak.txt;
+rm result.warning.bak.txt;
+mv result.warning.txt result.warning.bak.txt;
 
 # procedure that collects results and timing on one bechmark
 # f: arg1 -> arg2
@@ -42,9 +46,10 @@ mv result.txt result.bak.txt;
 # arg3: sampling module
 runexp() {
     echo "$1"
-    echo '[**name**]'"$1" >> result.txt
+    echo '[**name**]'"$1" >> result.time.txt
+    echo '[**name**]'"$1" >> result.warning.txt
 
-    echo '[****]loc: '`wc -l $2".js"` >> result.txt
+    echo '[****]loc: '`wc -l $2".js"` >> result.time.txt
 
     echo "instrumenting program:" "$2".js
     # first instrument the code
@@ -54,10 +59,14 @@ runexp() {
 	echo "start running..."
 	# run analysis on the benchmark code
 	# get jitprof slowdown
-	( node ../jalangi2/src/js/commands/direct.js --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalysesNoCheck.js --analysis src/js/analyses/jitprof/utils/Utils.js --analysis src/js/analyses/jitprof/utils/RuntimeDB.js --analysis src/js/analyses/jitprof/TrackHiddenClass.js  --analysis src/js/analyses/jitprof/AccessUndefArrayElem.js --analysis src/js/analyses/jitprof/SwitchArrayType.js --analysis src/js/analyses/jitprof/NonContiguousArray.js --analysis src/js/analyses/jitprof/BinaryOpOnUndef.js --analysis src/js/analyses/jitprof/PolymorphicFunCall.js --analysis src/js/analyses/jitprof/TypedArray.js --analysis src/js/analyses/jitprof/sampler/"$3".js  "$2"_jalangi_.js ) >> result.txt 2>&1	
+	( node ../jalangi2/src/js/commands/direct.js --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalysesNoCheck.js --analysis src/js/analyses/jitprof/utils/Utils.js --analysis src/js/analyses/jitprof/utils/RuntimeDB.js --analysis src/js/analyses/jitprof/TrackHiddenClass.js  --analysis src/js/analyses/jitprof/AccessUndefArrayElem.js --analysis src/js/analyses/jitprof/SwitchArrayType.js --analysis src/js/analyses/jitprof/NonContiguousArray.js --analysis src/js/analyses/jitprof/BinaryOpOnUndef.js --analysis src/js/analyses/jitprof/PolymorphicFunCall.js --analysis src/js/analyses/jitprof/TypedArray.js --analysis src/js/analyses/jitprof/sampler/"$3".js  "$2"_jalangi_.js ) 2>> result.time.txt 1>> /dev/null
+
 	# run the benchmark code without instrumentation and analysis
-	node src/js/timeNode.js "$2".js 2>> result.txt
+	node src/js/timeNode.js "$2".js 2>> result.time.txt
 	# ( { time node "$2" | tee >(grep -Ei ".*" >> result.txt); } 2>&1 ) | { grep -Ei "^(real|user|sys)" >> result.txt; }
+
+	# get jitprof warnings
+	( node ../jalangi2/src/js/commands/direct.js --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalysesNoCheck.js --analysis src/js/analyses/jitprof/utils/Utils.js --analysis src/js/analyses/jitprof/utils/RuntimeDB.js --analysis src/js/analyses/jitprof/TrackHiddenClass.js  --analysis src/js/analyses/jitprof/AccessUndefArrayElem.js --analysis src/js/analyses/jitprof/SwitchArrayType.js --analysis src/js/analyses/jitprof/NonContiguousArray.js --analysis src/js/analyses/jitprof/BinaryOpOnUndef.js --analysis src/js/analyses/jitprof/PolymorphicFunCall.js --analysis src/js/analyses/jitprof/TypedArray.js --analysis src/js/analyses/jitprof/sampler/"$3".js  "$2"_jalangi_.js ) >> result.warning.txt 2>&1
 }
 
 : <<'END'
@@ -109,4 +118,5 @@ runexp "SunSpider-String-Tagcloud" "../jalangi2/tests/sunspider1""$jalangi_ver""
 runexp "SunSpider-String-Unpack-Code" "../jalangi2/tests/sunspider1""$jalangi_ver""/string-unpack-code" "$1"
 runexp "SunSpider-String-Validate-Input" "../jalangi2/tests/sunspider1""$jalangi_ver""/string-validate-input" "$1"
 
-echo '[*]exp-done' >> result.txt
+echo '[*]exp-done' >> result.time.txt
+echo '[*]exp-done' >> result.warning.txt

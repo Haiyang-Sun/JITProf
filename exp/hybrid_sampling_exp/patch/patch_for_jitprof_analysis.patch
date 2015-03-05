@@ -285,7 +285,7 @@ index f97efa0..d6c8e92 100755
      var longFormat = date.formatDate("l, F d, Y g:i:s A");
      date.setTime(date.getTime() + 84266956);
 -    //console.log(date.toUTCString());
-+    //// console.log(date.toUTCString());
++    date.toUTCString();
  }
  
 diff --git a/tests/sunspider1/date-format-xparb.js b/tests/sunspider1/date-format-xparb.js
@@ -297,7 +297,7 @@ index d6dd70b..b9c9969 100755
      var longFormat = date.dateFormat("l, F d, Y g:i:s A");
      date.setTime(date.getTime() + 84266956);
 -    console.log(date.toUTCString());
-+    // console.log(date.toUTCString());
++    date.toUTCString();
  }
 diff --git a/tests/sunspider1/math-cordic.js b/tests/sunspider1/math-cordic.js
 index 43674d8..d42681e 100755
@@ -321,7 +321,7 @@ index cc7c65d..67201cd 100755
  
  for (var i = 6; i <= 48; i *= 2) {
 -    console.log(spectralnorm(i));
-+    // console.log(spectralnorm(i));
++    spectralnorm(i);
  }
 diff --git a/tests/sunspider1/regexp-dna.js b/tests/sunspider1/regexp-dna.js
 index cfa0a01..833a4fe 100755

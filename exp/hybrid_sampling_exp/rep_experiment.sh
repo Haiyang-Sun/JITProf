@@ -41,6 +41,7 @@ rounds=5
 # apply jalangi2 change patch for sampling configuration
 cd ../jalangi2
 git stash  # undo applied patches
+# only doing sampling at instruction level
 git apply ../jalangi2analyses/exp/hybrid_sampling_exp/patch/patch_for_jitprof_analysis_sampling.patch
 cd ../jalangi2analyses
 
@@ -55,10 +56,10 @@ for i in `seq 1 $rounds`;
 		# run benchmarks with analysis (instruction level using decaying sampling, function level using decaying sampling)
 		./exp/hybrid_sampling_exp/experiment.sh decay
 		# collect LOC, running time and slowdown
-		node ./exp/hybrid_sampling_exp/stat.js result.txt exp/hybrid_sampling_exp/result/result-jitprof-hybrid-decay-"$i".csv
+		node ./exp/hybrid_sampling_exp/stat.js result.time.txt exp/hybrid_sampling_exp/result/result-jitprof-hybrid-decay-"$i".csv
 		# collect warning preservation information
-		node exp/hybrid_sampling_exp/warningMatcher.js result.txt > exp/hybrid_sampling_exp/result/result-jitprof-hybrid-decay-"$i".json
-    done 
+		node exp/hybrid_sampling_exp/warningMatcher.js result.warning.txt > exp/hybrid_sampling_exp/result/result-jitprof-hybrid-decay-"$i".json
+	done 
 
 # undo applied patches
 cd ../jalangi2

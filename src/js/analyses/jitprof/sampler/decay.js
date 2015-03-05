@@ -54,7 +54,7 @@
                 callAnalysis = false;
             }
             sampleCountArray[iid] = sampleCnt; // update count
-            return callAnalysis;
+            return !callAnalysis;
         };
     }
 

@@ -51,9 +51,8 @@ if (typeof J$ === 'undefined') {
     var callAnalysis;
     var sampleArray2;
     var sampleArray;
-    var sampleCountArrayLen = 1181;
-    var sampleCountArray = new Uint16Array(sampleCountArrayLen); // new Uint16Array(800000); // maps iid --> current count
-    var sampleCountIdxArray = new Uint16Array(sampleCountArrayLen); //new Uint8Array(800000); // maps iid --> current index in the sample count array
+    var sampleCountArray = []; // new Uint16Array(800000); // maps iid --> current count
+    var sampleCountIdxArray = []; //new Uint8Array(800000); // maps iid --> current index in the sample count array
     var sampleArrayLen;
     var sampleCnt;
     var sampleCntIdx;
@@ -174,18 +173,24 @@ if (typeof J$ === 'undefined') {
     function invokeFun(iid, base, f, args, isConstructor, isMethod) {
         var aret, skip = false, result;
         
-        // ---- start sample part code ----]
-        var id = iid % sampleCountArrayLen;
-        sampleCntIdx = sampleCountIdxArray[id];
-        sampleCnt = sampleCountArray[id];
+        // ---- start sample part code ----
+        if (iid in sampleCountArray) {
+            sampleCntIdx = sampleCountIdxArray[iid];
+            sampleCnt = sampleCountArray[iid];
+        } else {
+            sampleCntIdx = 0;
+            sampleCnt = sampleArray[sampleCntIdx];
+            sampleCountIdxArray[iid] = sampleCntIdx; // update index
+            // count in sampleCountArray will be updated finally
+        }
         if ((--sampleCnt) <= 0) {
             callAnalysis = true;
             sampleCnt = sampleArray[(sampleCntIdx++) % sampleArrayLen];
-            sampleCountIdxArray[id] = sampleCntIdx; // update index
+            sampleCountIdxArray[iid] = sampleCntIdx; // update index
         } else {
             callAnalysis = false;
         }
-        sampleCountArray[id] = sampleCnt; // update count
+        sampleCountArray[iid] = sampleCnt; // update count
         // ---- end sample part code ----
 
         /*if (callAnalysis && sandbox.analysis && sandbox.analysis.invokeFunPre) {
@@ -247,18 +252,24 @@ if (typeof J$ === 'undefined') {
             }
         }
 
-        // ---- start sample part code ----]
-        var id = iid % sampleCountArrayLen;
-        sampleCntIdx = sampleCountIdxArray[id];
-        sampleCnt = sampleCountArray[id];
+        // ---- start sample part code ----
+        if (iid in sampleCountArray) {
+            sampleCntIdx = sampleCountIdxArray[iid];
+            sampleCnt = sampleCountArray[iid];
+        } else {
+            sampleCntIdx = 0;
+            sampleCnt = sampleArray[sampleCntIdx];
+            sampleCountIdxArray[iid] = sampleCntIdx; // update index
+            // count in sampleCountArray will be updated finally
+        }
         if ((--sampleCnt) <= 0) {
             callAnalysis = true;
             sampleCnt = sampleArray[(sampleCntIdx++) % sampleArrayLen];
-            sampleCountIdxArray[id] = sampleCntIdx; // update index
+            sampleCountIdxArray[iid] = sampleCntIdx; // update index
         } else {
             callAnalysis = false;
         }
-        sampleCountArray[id] = sampleCnt; // update count
+        sampleCountArray[iid] = sampleCnt; // update count
         // ---- end sample part code ----
 
         if (sandbox.analysis && sandbox.analysis.literal && callAnalysis) {
@@ -310,18 +321,24 @@ if (typeof J$ === 'undefined') {
     function G(iid, base, offset, isComputed, isOpAssign, isMethodCall) {
         var aret, skip = false, val;
 
-        // ---- start sample part code ----]
-        var id = iid % sampleCountArrayLen;
-        sampleCntIdx = sampleCountIdxArray[id];
-        sampleCnt = sampleCountArray[id];
+        // ---- start sample part code ----
+        if (iid in sampleCountArray) {
+            sampleCntIdx = sampleCountIdxArray[iid];
+            sampleCnt = sampleCountArray[iid];
+        } else {
+            sampleCntIdx = 0;
+            sampleCnt = sampleArray[sampleCntIdx];
+            sampleCountIdxArray[iid] = sampleCntIdx; // update index
+            // count in sampleCountArray will be updated finally
+        }
         if ((--sampleCnt) <= 0) {
             callAnalysis = true;
             sampleCnt = sampleArray[(sampleCntIdx++) % sampleArrayLen];
-            sampleCountIdxArray[id] = sampleCntIdx; // update index
+            sampleCountIdxArray[iid] = sampleCntIdx; // update index
         } else {
             callAnalysis = false;
         }
-        sampleCountArray[id] = sampleCnt; // update count
+        sampleCountArray[iid] = sampleCnt; // update count
         // ---- end sample part code ----
 
         if (sandbox.analysis && sandbox.analysis.getFieldPre && callAnalysis) {
@@ -349,18 +366,24 @@ if (typeof J$ === 'undefined') {
     function P(iid, base, offset, val, isComputed, isOpAssign) {
         var aret, skip = false;
 
-        // ---- start sample part code ----]
-        var id = iid % sampleCountArrayLen;
-        sampleCntIdx = sampleCountIdxArray[id];
-        sampleCnt = sampleCountArray[id];
+        // ---- start sample part code ----
+        if (iid in sampleCountArray) {
+            sampleCntIdx = sampleCountIdxArray[iid];
+            sampleCnt = sampleCountArray[iid];
+        } else {
+            sampleCntIdx = 0;
+            sampleCnt = sampleArray[sampleCntIdx];
+            sampleCountIdxArray[iid] = sampleCntIdx; // update index
+            // count in sampleCountArray will be updated finally
+        }
         if ((--sampleCnt) <= 0) {
             callAnalysis = true;
             sampleCnt = sampleArray[(sampleCntIdx++) % sampleArrayLen];
-            sampleCountIdxArray[id] = sampleCntIdx; // update index
+            sampleCountIdxArray[iid] = sampleCntIdx; // update index
         } else {
             callAnalysis = false;
         }
-        sampleCountArray[id] = sampleCnt; // update count
+        sampleCountArray[iid] = sampleCnt; // update count
         // ---- end sample part code ----
 
         if (sandbox.analysis && sandbox.analysis.putFieldPre && callAnalysis) {
@@ -391,18 +414,24 @@ if (typeof J$ === 'undefined') {
     function R(iid, name, val, isGlobal, isScriptLocal) {
         var aret;
 
-        // ---- start sample part code ----]
-        var id = iid % sampleCountArrayLen;
-        sampleCntIdx = sampleCountIdxArray[id];
-        sampleCnt = sampleCountArray[id];
+        // ---- start sample part code ----
+        if (iid in sampleCountArray) {
+            sampleCntIdx = sampleCountIdxArray[iid];
+            sampleCnt = sampleCountArray[iid];
+        } else {
+            sampleCntIdx = 0;
+            sampleCnt = sampleArray[sampleCntIdx];
+            sampleCountIdxArray[iid] = sampleCntIdx; // update index
+            // count in sampleCountArray will be updated finally
+        }
         if ((--sampleCnt) <= 0) {
             callAnalysis = true;
             sampleCnt = sampleArray[(sampleCntIdx++) % sampleArrayLen];
-            sampleCountIdxArray[id] = sampleCntIdx; // update index
+            sampleCountIdxArray[iid] = sampleCntIdx; // update index
         } else {
             callAnalysis = false;
         }
-        sampleCountArray[id] = sampleCnt; // update count
+        sampleCountArray[iid] = sampleCnt; // update count
         // ---- end sample part code ----
 
         if (sandbox.analysis && sandbox.analysis.read && callAnalysis) {
@@ -418,18 +447,24 @@ if (typeof J$ === 'undefined') {
     function W(iid, name, val, lhs, isGlobal, isScriptLocal, isDeclaration) {
         var aret;
 
-        // ---- start sample part code ----]
-        var id = iid % sampleCountArrayLen;
-        sampleCntIdx = sampleCountIdxArray[id];
-        sampleCnt = sampleCountArray[id];
+        // ---- start sample part code ----
+        if (iid in sampleCountArray) {
+            sampleCntIdx = sampleCountIdxArray[iid];
+            sampleCnt = sampleCountArray[iid];
+        } else {
+            sampleCntIdx = 0;
+            sampleCnt = sampleArray[sampleCntIdx];
+            sampleCountIdxArray[iid] = sampleCntIdx; // update index
+            // count in sampleCountArray will be updated finally
+        }
         if ((--sampleCnt) <= 0) {
             callAnalysis = true;
             sampleCnt = sampleArray[(sampleCntIdx++) % sampleArrayLen];
-            sampleCountIdxArray[id] = sampleCntIdx; // update index
+            sampleCountIdxArray[iid] = sampleCntIdx; // update index
         } else {
             callAnalysis = false;
         }
-        sampleCountArray[id] = sampleCnt; // update count
+        sampleCountArray[iid] = sampleCnt; // update count
         // ---- end sample part code ----
 
         if (sandbox.analysis && sandbox.analysis.write && callAnalysis) {
@@ -572,18 +607,24 @@ if (typeof J$ === 'undefined') {
     function B(iid, op, left, right, isComputed, isOpAssign, isSwitchCaseComparison) {
         var result, aret, skip = false;
          
-        // ---- start sample part code ----]
-        var id = iid % sampleCountArrayLen;
-        sampleCntIdx = sampleCountIdxArray[id];
-        sampleCnt = sampleCountArray[id];
+        // ---- start sample part code ----
+        if (iid in sampleCountArray) {
+            sampleCntIdx = sampleCountIdxArray[iid];
+            sampleCnt = sampleCountArray[iid];
+        } else {
+            sampleCntIdx = 0;
+            sampleCnt = sampleArray[sampleCntIdx];
+            sampleCountIdxArray[iid] = sampleCntIdx; // update index
+            // count in sampleCountArray will be updated finally
+        }
         if ((--sampleCnt) <= 0) {
             callAnalysis = true;
             sampleCnt = sampleArray[(sampleCntIdx++) % sampleArrayLen];
-            sampleCountIdxArray[id] = sampleCntIdx; // update index
+            sampleCountIdxArray[iid] = sampleCntIdx; // update index
         } else {
             callAnalysis = false;
         }
-        sampleCountArray[id] = sampleCnt; // update count
+        sampleCountArray[iid] = sampleCnt; // update count
         // ---- end sample part code ----
 
         if (sandbox.analysis && sandbox.analysis.binaryPre && callAnalysis) {
@@ -685,18 +726,24 @@ if (typeof J$ === 'undefined') {
     function U(iid, op, left) {
         var result, aret, skip = false;
         
-        // ---- start sample part code ----]
-        var id = iid % sampleCountArrayLen;
-        sampleCntIdx = sampleCountIdxArray[id];
-        sampleCnt = sampleCountArray[id];
+        // ---- start sample part code ----
+        if (iid in sampleCountArray) {
+            sampleCntIdx = sampleCountIdxArray[iid];
+            sampleCnt = sampleCountArray[iid];
+        } else {
+            sampleCntIdx = 0;
+            sampleCnt = sampleArray[sampleCntIdx];
+            sampleCountIdxArray[iid] = sampleCntIdx; // update index
+            // count in sampleCountArray will be updated finally
+        }
         if ((--sampleCnt) <= 0) {
             callAnalysis = true;
             sampleCnt = sampleArray[(sampleCntIdx++) % sampleArrayLen];
-            sampleCountIdxArray[id] = sampleCntIdx; // update index
+            sampleCountIdxArray[iid] = sampleCntIdx; // update index
         } else {
             callAnalysis = false;
         }
-        sampleCountArray[id] = sampleCnt; // update count
+        sampleCountArray[iid] = sampleCnt; // update count
         // ---- end sample part code ----
 
         if (sandbox.analysis && sandbox.analysis.unaryPre && callAnalysis) {

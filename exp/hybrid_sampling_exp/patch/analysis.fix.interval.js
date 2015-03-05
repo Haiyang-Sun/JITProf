@@ -47,7 +47,7 @@ if (typeof J$ === 'undefined') {
     var lastComputedValue;
     var SPECIAL_PROP_SID = sandbox.Constants.SPECIAL_PROP_SID;
     var sampleCnt = 0; // counter for sampling
-    var sampleDenominator = 10;
+    var sampleDenominator = 1000;
 
     var sidStack = [], sidCounter = 0;
 
@@ -153,9 +153,9 @@ if (typeof J$ === 'undefined') {
 
     function invokeFun(iid, base, f, args, isConstructor, isMethod) {
         var aret, skip = false, result;
-        //var sample = ((sampleCnt++)%sampleDenominator === 0);
-        //sampleCnt &= 0xFFFF;
-        var sample = true;
+        var sample = ((sampleCnt++)%sampleDenominator === 0);
+        sampleCnt &= 0xFFFF;
+        // var sample = true;
 
         if (sandbox.analysis && sandbox.analysis.invokeFunPre && sample) {
             aret = sandbox.analysis.invokeFunPre(iid, f, base, args, isConstructor, isMethod);
@@ -649,8 +649,7 @@ if (typeof J$ === 'undefined') {
     // case label inside switch
     function C2(iid, right) {
         var aret, result;
-        var sample = ((sampleCnt++)%sampleDenominator === 0);
-        sampleCnt &= 0xFFFF;
+        var sample = true;
 
         // avoid iid collision; iid may not have a map in the sourcemap
         result = B(iid+1, "===", switchLeft, right, false, false, true);
@@ -671,8 +670,7 @@ if (typeof J$ === 'undefined') {
     // Expression in conditional
     function C(iid, left) {
         var aret;
-        var sample = ((sampleCnt++)%sampleDenominator === 0);
-        sampleCnt &= 0xFFFF;
+        var sample = true
 
         if (sandbox.analysis && sandbox.analysis.conditional & sample) {
             aret = sandbox.analysis.conditional(iid, left);
@@ -697,8 +695,7 @@ if (typeof J$ === 'undefined') {
     }
 
     function X1(iid, val) {
-        var sample = ((sampleCnt++)%sampleDenominator === 0);
-        sampleCnt &= 0xFFFF;
+        var sample = true
 
         if (sandbox.analysis && sandbox.analysis.endExpression & sample) {
             sandbox.analysis.endExpression(iid);
