@@ -37,21 +37,13 @@
 	var fs = require('fs');
 	// 10% sampling rate
 	var random_sampling_rate = 1;
-	var sample_array_len = 10000000;
-	var sample_count_array = [];
+	var sample_array_len = 100000000;
+	var sample_count_array = []; //first gets ignored
 	var count = 1;
 	var sample_num = 0;
 	var k = 20; // no sampling for the first 20 instances
 	for (var i = 0; i < sample_array_len && sample_count_array.length < 20000; i++) {
-		//sample_count_array.push(10000000000);
-		//continue;
-		/*if (Math.random() < 0.001) {
-			sample_count_array.push(count);
-			count = 1;
-		} else {
-			count++;
-		}
-		continue;*/
+		// not sampling for the first k instances
 		if (sample_count_array.length < k - 1) {
 			sample_count_array.push(1);
 		} else if (Math.random() < random_sampling_rate) {
@@ -60,11 +52,11 @@
 			if(random_sampling_rate > 0.0005) {
 				sample_num++;
 			}
-			/*if(Math.random() < 0.01) {
+			if(Math.random() < 0.01) {
 				for(var k=0;k<5;k++) {
 					sample_count_array.push(1);
 				}
-			}*/
+			}
 			random_sampling_rate = 1 / (sample_num * 5 + 1);
 		} else {
 			count++;
