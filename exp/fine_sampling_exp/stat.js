@@ -110,6 +110,7 @@ function createRow() {
         data_name: 0,
         loc: 0,
         runtime: 0,
+        instru_eval_time: 0,
         slowdown: 0,
         originaltime: 0,
         hc_num: 0,
@@ -152,6 +153,7 @@ function formatCell(value) {
 }
 
 function appendRow(row) {
+    currentRow.runtime = currentRow.runtime - currentRow.instru_eval_time;
     currentRow.slowdown = currentRow.runtime/currentRow.originaltime;
 
     var row_str = '';
@@ -277,16 +279,17 @@ rd.on('line', function(line) {
      -------------Fix Array Refactor Report-------------
      Array created at the following locations may be special-typed:
      location: (/Users/jacksongl/macos-workspace/research/jalangi/github_jit/jalangi/tests/octane/splay.js:49:16)
-     [Oper-Count]:	2816
+     [Oper-Count]:  2816
      [READONLY]
      [****]typedArray: 1
      ---------------------------------------------------
      Following arrays can not be typed:
 
+     [****]instrument-eval-time: 5.523s
      None
-     real	0m0.049s
-     user	0m0.039s
-     sys	0m0.011s
+     real   0m0.049s
+     user   0m0.039s
+     sys    0m0.011s
      [*]exp-done
 
  */
@@ -326,6 +329,13 @@ function process_line(line) {
         return ;
     }
 
+    // match [****]instrument-eval-time: 5.523s
+    res_array = /\[\*\*\*\*\]instrument-eval-time: (\d+(\.\d+)*)/.exec(line);
+    if(res_array) {
+        currentRow.instru_eval_time += res_array[1];
+        return ;
+    }
+
     // match [****]loc: 123
     res_array = /\[\*\*\*\*\]loc:\s*(\d+)/.exec(line);
     if(res_array) {
@@ -335,9 +345,9 @@ function process_line(line) {
 
     /*
     match:
-     real	0m0.047s
-     user	0m0.038s
-     sys	0m0.012s
+     real   0m0.047s
+     user   0m0.038s
+     sys    0m0.012s
     */
     res_array = /real[\s]*((\d+)m)?(\d+(\.\d+)?)s/.exec(line);
     if(res_array) {

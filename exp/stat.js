@@ -110,6 +110,7 @@ function createRow() {
         data_name: 0,
         loc: 0,
         runtime: 0,
+        instru_eval_time: 0,
         slowdown: 0,
         originaltime: 0,
         hc_num: 0,
@@ -152,6 +153,7 @@ function formatCell(value) {
 }
 
 function appendRow(row) {
+    currentRow.runtime = currentRow.runtime - currentRow.instru_eval_time;
     currentRow.slowdown = currentRow.runtime/currentRow.originaltime;
 
     var row_str = '';
@@ -283,6 +285,7 @@ rd.on('line', function(line) {
      ---------------------------------------------------
      Following arrays can not be typed:
 
+     [****]instrument-eval-time: 5.523s
      None
      real	0m0.049s
      user	0m0.039s
@@ -323,6 +326,13 @@ function process_line(line) {
     res_array = /\[\*\*\*\*\]time: (\d+(\.\d+)*)/.exec(line);
     if(res_array) {
         currentRow.runtime = res_array[1];
+        return ;
+    }
+
+    // match [****]instrument-eval-time: 5.523s
+    res_array = /\[\*\*\*\*\]instrument-eval-time: (\d+(\.\d+)*)/.exec(line);
+    if(res_array) {
+        currentRow.instru_eval_time += res_array[1];
         return ;
     }
 

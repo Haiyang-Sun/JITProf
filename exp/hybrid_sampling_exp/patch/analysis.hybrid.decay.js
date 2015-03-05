@@ -151,8 +151,12 @@ if (typeof J$ === 'undefined') {
     }
 
     function invokeEval(base, f, args, iid) {
-        //return f(sandbox.instrumentEvalCode(args[0], iid));
-        return f(args[0]);
+        var startTime = new Date();
+        var instCode = sandbox.instrumentEvalCode(args[0], iid);
+        var endTime = new Date();
+        console.error('[****]instrument-eval-time: ' + ((endTime - startTime)/1000) + 's');
+        return f(instCode);
+        // return f(args[0]);
     }
 
     function callFun(f, base, args, isConstructor, iid) {
