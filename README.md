@@ -1,17 +1,17 @@
 This repository currently has been tested on Mac OS.
 
-### Install
+#### Install
 
 To run JITProf with Jalangi2 on real-world websites, you need to install
 	
  * jalangi2
  * mitmproxy
 
-### Install jalangi2
+#### Install jalangi2
 See the Jalangi2 Repository here:
 https://github.com/Samsung/jalangi2
 
-### Install mitmproxy
+#### Install mitmproxy
 ```
 sudo easy_install pip
 pip install mitmproxy
@@ -40,7 +40,7 @@ in the pyOpenSSL-0.14 directory, run the following command to install the new ve
 sudo python setup.py install --user
 ```
 
-### Install mitmproxy certificate
+#### Install mitmproxy certificate
 Details can be found at this location:
 http://mitmproxy.org/doc/ssl.html
 
@@ -63,7 +63,7 @@ Now you are good to go:
 ../scripts/mitmproxywrapper.py -t -q --anticache -s "../scripts/proxy.py ../src/js/sample_analyses/ChainedAnalyses.js ../src/js/runtime/analysisCallbackTemplate.js"
 ```
 
-### Run JITProf on node.js
+#### Run JITProf on node.js
 
 ```
 ./script/jitprof.sh <js program relative path without .js suffix>
@@ -75,7 +75,7 @@ Example:
 ./script/jitprof.sh tests/jitprof/JITAwareTest
 ```
 
-### Run JITProf on node.js with sampling
+#### Run JITProf on node.js with sampling
 
 **Warning:** the following script will stash and apply a patch to the jalangi2 repository in the sibling directory of jitprof. Please make sure all changes in that Jalangi2 directory are properly saved.
 
@@ -84,7 +84,7 @@ Run JITProf with random sampler (10% sampling rate):
 ./script/jitprof-sample.sh <sampler name> <js program relative path without .js suffix>
 ```
 
-Existing samplers: ```random```, ```fix-interval```, ```detain```
+Existing samplers: ```non```, ```random```, ```decay```
 
 Example:
 
@@ -92,19 +92,32 @@ Example:
 ./script/jitprof-sample.sh random tests/jitprof/JITAwareTest
 ```
 
-### Run JITProf in Jalangi2 on Websites
+#### Run JITProf in Jalangi2 on Websites
 
 No go back to the jalangi2analyses directory:
 
-under directory ```exp/tmp```:
+
 ```
-../../../jalangi2/scripts/mitmproxywrapper.py --cert=`pwd`/../websites/cert.pem -t -q --anticache -s "../../../jalangi2/scripts/proxy.py ../../../jalangi2/src/js/sample_analyses/ChainedAnalyses.js ../../src/js/analyses/jitprof/utils/Utils.js ../../src/js/analyses/jitprof/utils/RuntimeDB.js ../../src/js/analyses/jitprof/TrackHiddenClass.js  ../../src/js/analyses/jitprof/AccessUndefArrayElem.js ../../src/js/analyses/jitprof/SwitchArrayType.js ../../src/js/analyses/jitprof/NonContiguousArray.js ../../src/js/analyses/jitprof/BinaryOpOnUndef.js ../../src/js/analyses/jitprof/PolymorphicFunCall.js ../../src/js/analyses/jitprof/TypedArray.js"
+./script/jitprof-web.sh < sampler's name >
 ```
 
-After chaning the analysis configuration, remember to clear cashed files under ```exp/tmp```.
+Existing samplers: ```non```, ```random```, ```decay```
 
+Example:
+```
+./script/jitprof-web.sh non
+```
 
-### Collect data of instrumentation overhead
+Now you can explore the web with any browser you like.
+In the browser window, use ```Alt```-```Shift```-```T``` key combination to dump
+the JITProf wanrings in the web console.
+
+After using JITProf, type the following command to disable web proxy configuration. 
+```
+./script/jitprof-web.sh
+```
+
+#### Collect data of instrumentation overhead
 
 ```
 ./exp/experiment.sh
@@ -116,7 +129,7 @@ If sampling mechanism is deployed, generate the sampling array first:
 node exp/getSampleArray.js
 ```
 
-### Run nop-analysis on Jalangi2
+#### Run nop-analysis on Jalangi2
 
 Nop-analysis is the empty template. 
 
