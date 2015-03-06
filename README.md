@@ -17,11 +17,11 @@ for(var i=10000-1;i>=0;i++) {
 }
 ```
 
-This is very JIT-unfriendly, as the first half of iterations create a non-contiguous array.
+The first half of iterations create a non-contiguous array.
 In order to save memory, JIT-engine will use a hash-table-like representation to store the array
-in memory instead of a contiguous memory space (like in C/C++). As a result, accessing the array is very expensive.
+in memory instead of a contiguous memory space (like in C/C++). Consequently, accessing ```array``` is quite slow.
 
-A more efficient and JIT-friendly version is to initialize the array elements from a lower index to a higher index:
+A more efficient and JIT-friendly code should initialize the array elements in asending order:
 
 ```javascript
 var array = [];
@@ -30,8 +30,10 @@ for(var i=0;i<10000;i++) {
 }
 ```
 
-The JIT-engine will always use contiguous memory space to store the array and array access is pretty fast.
-This simple change can give you 10X-20X speedup on Firefox and Chrome.
+This time, the JIT-engine will always use contiguous memory space for array and array accessing is much faster.
+This simple change leads to 10X-20X speedup on Firefox and Chrome.
+
+Note that there are different JIT-unfriendly code patterns, those patterns related to memory model, polimorphic operations, hidden classes and inline caching. More details are in our [technical report](docs/TR.md).
 
 #### How does JITProf work?
 
