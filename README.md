@@ -33,7 +33,7 @@ for(var i=0;i<10000;i++) {
 This time, the JIT-engine will always use contiguous memory space for array and array accessing is much faster.
 This simple change leads to 10X-20X speedup on Firefox and Chrome.
 
-Note that there are different JIT-unfriendly code patterns, those patterns related to memory model, polimorphic operations, hidden classes and inline caching. More details are in our [technical report](docs/TR.md).
+Note that there are different JIT-unfriendly code patterns, those patterns relate to memory model, polimorphic operations, hidden classes and inline caching. More details are in our [technical report](docs/TR.md).
 
 #### How does JITProf work?
 
