@@ -12,7 +12,7 @@ JIT-unfriendly code is a piece of JavaScript that is hard for the JIT-engine to 
 
 ```javascript
 var array = [];
-for(var i=10000-1;i>=0;i++) {
+for(var i=10000-1;i>=0;i--) {
 	array[i] = i; // JIT-unfriendly code
 }
 ```
