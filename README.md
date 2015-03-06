@@ -46,7 +46,8 @@ For more details, please [read this document](docs/TR.md).
 The speedup ranges from 1% ~ 20% on SunSpider and Google Octane benchmark.
 
 
-### Install JITProf
+Install JITProf
+---------------
 
 To run JITProf with Jalangi2 on real-world websites, you need to install
 	
@@ -55,7 +56,8 @@ To run JITProf with Jalangi2 on real-world websites, you need to install
 
  * **mitmproxy** For more details, please read [this document](docs/mitmproxy_install.md).
 
-### Use JITProf to find JIT-unfriendly code
+Use JITProf to find JIT-unfriendly code
+---------------------------------------
 
 JITProf can be used on both node.js applications and websites.
 
