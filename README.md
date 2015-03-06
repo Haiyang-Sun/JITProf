@@ -46,23 +46,18 @@ For more details, please [read this document](docs/TR.md).
 The speedup ranges from 1% ~ 20% on SunSpider and Google Octane benchmark.
 
 
-### Install
+### Install JITProf
 
 To run JITProf with Jalangi2 on real-world websites, you need to install
 	
- * jalangi2
- * mitmproxy
+ * **jalangi2** See the [Jalangi2 Repository](https://github.com/Samsung/jalangi2)
+ (Put Jalangi2 repository and this repository under the same directory.)
 
-#### Install jalangi2
+ * **mitmproxy** For more details, please read [this document](docs/mitmproxy_install.md).
 
-**Important Note:** put Jalangi2 repository and this repository under the same directory.
+### Use JITProf to find JIT-unfriendly code
 
-See the Jalangi2 Repository here:
-https://github.com/Samsung/jalangi2
-
-#### Install mitmproxy and certificates
-
-For more details, please read [this document](docs/mitmproxy_install.md).
+JITProf can be used on both node.js applications and websites.
 
 #### Find JIT-unfriendly code running on node.js
 
@@ -76,7 +71,7 @@ Example:
 ./script/jitprof.sh tests/jitprof/JITAwareTest
 ```
 
-### Find JIT-unfriendly code (reduce overhead by sampling)
+#### Find JIT-unfriendly code (reduce overhead by sampling)
 
 **Warning:** the following script will stash and apply a patch to the jalangi2 repository in the sibling directory of jitprof. Please make sure all changes in the Jalangi2 directory are properly saved.
 
@@ -93,7 +88,7 @@ Example:
 ./script/jitprof-sample.sh random tests/jitprof/JITAwareTest
 ```
 
-### Find JIT-unfriendly code on websites
+#### Find JIT-unfriendly code on websites
 
 No go back to the jalangi2analyses directory:
 
@@ -125,11 +120,7 @@ we can reduce the overhead of JITProf by one (sometime two) order(s) of magnitud
 
 For more details and to replicate the experiment, [please go to this page](exp/hybrid_sampling_exp).
 
+License
+-------
 
-### Run nop-analysis
-
-Nop-analysis is the empty template. 
-
-```
-node ../jalangi2/src/js/commands/jalangi.js --inlineIID --inlineSource --analysis ../jalangi2/src/js/sample_analyses/ChainedAnalysesNoCheck.js --analysis ../jalangi2/src/js/runtime/analysisCallbackTemplate.js tests/jitprof/JITAwareTest.js
-```
+JITProf is distributed under the [Apache License](http://www.apache.org/licenses/LICENSE-2.0.html).
