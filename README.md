@@ -1,15 +1,50 @@
 JITProf v1.1
 =====================
-### Introduction
+### What is JITProf?
 
-Most modern JavaScript engines use just-in-time (JIT) compilation to translate parts of JavaScript code into efficient machine code at runtime. Despite the overall success of JIT compilers, programmers may still write code that uses the dynamic features of JavaScript in a way that prohibits profitable optimizations. Unfortunately, there currently is no technique that helps developers to identify such JIT-unfriendly code. This paper presents JIT-Prof, a profiling framework to dynamically identify code locations that prohibit profitable JIT optimizations. The basic idea is to associate execution counters with potentially JIT-unfriendly code locations and to use these counters to report code locations that match code patterns known to prohibit optimizations. We instantiate the idea for six JIT-unfriendly code patterns that cause performance problems in the Firefox and Chrome browsers, and we apply the approach to popular benchmark programs. Our results show that refactoring these programs to avoid performance problems identified by JIT-Prof leads to performance improvements of up to 26.3% in 12 benchmarks.
+JITProf is a tool that tells you which part of your JavaScript code may be slow on JIT-engine. We call those slow code **JIT-unfriendly code**.
 
-### Authors
-Liang Gong, Michael Pradel, Koushik Sen
+### What is JIT-unfriendly code?
 
-A technical report is available at:
+JIT-unfriendly code is a piece of JavaScript that is hard for the JIT-engine to do profitable optimization.
 
-http://www.eecs.berkeley.edu/Pubs/TechRpts/2014/EECS-2014-144.html
+**Example:** Suppose you want to create an array containing 10k numbers with number i at index i:
+
+```javascript
+var array = [];
+for(var i=10000-1;i>=0;i++) {
+	array[i] = i; // JIT-unfriendly code
+}
+```
+
+This is very JIT-unfriendly, as the first half of iterations create a non-contiguous array.
+In order to save memory, JIT-engine will use a hash-table-like representation to store the array
+in memory instead of a contiguous memory space (like in C/C++). As a result, accessing the array is very expensive.
+
+A more efficient and JIT-friendly version is to initialize the array elements from a lower index to a higher index:
+
+```javascript
+var array = [];
+for(var i=0;i<10000;i++) {
+	array[i] = i;
+}
+```
+
+The JIT-engine will always use contiguous memory space to store the array and array access is pretty fast.
+This simple change can give you 10X-20X speedup on Firefox and Chrome.
+
+### How does JITProf work?
+
+JITProf monitors the execution of a JavaScript program and analyses its runtime behavior to pinpoint the JIT-unfriendly code location.
+
+For the previous example, JITProf will pinpoint to ```array[i] = i;``` and tells you the code is accessing a non-contiguous array
+frequently.
+
+### Overall how much speedup can I get after removing JIT-unfriendly code?
+
+The speedup ranges from 1% ~ 20% on SunSpider and Google Octane benchmark.
+
+For more details, please [read this document](docs/TR.md).
 
 ### Install
 
@@ -43,7 +78,7 @@ Example:
 
 ### Find JIT-unfriendly code (reduce overhead by sampling)
 
-**Warning:** the following script will stash and apply a patch to the jalangi2 repository in the sibling directory of jitprof. Please make sure all changes in that Jalangi2 directory are properly saved.
+**Warning:** the following script will stash and apply a patch to the jalangi2 repository in the sibling directory of jitprof. Please make sure all changes in the Jalangi2 directory are properly saved.
 
 Run JITProf with random sampler (10% sampling rate):
 ```
