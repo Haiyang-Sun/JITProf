@@ -59,10 +59,31 @@ To run JITProf with Jalangi2 on real-world websites, you need to install
 
 JITProf can be used on both node.js applications and websites.
 
+#### Find JIT-unfriendly code on websites
+
+No go back to the jalangi2analyses directory:
+
+
+```
+./script/jitprof-web.sh [sampler's name]
+```
+
+Existing samplers: ```non```, ```random```, ```decay```
+
+
+Now you can explore the web with any browser you like.
+In the browser window, use ```Alt```-```Shift```-```T``` key combination to dump
+the JITProf wanrings in the web console.
+
+**Note:** After using JITProf, type the following command to disable web proxy configuration. 
+```
+./script/jitprof-web.sh
+```
+
 #### Find JIT-unfriendly code running on node.js
 
 ```
-./script/jitprof.sh <js program relative path without .js suffix>
+./script/jitprof.sh [js program relative path without .js suffix]
 ```
 
 Example:
@@ -88,30 +109,6 @@ Example:
 ./script/jitprof-sample.sh random tests/jitprof/JITAwareTest
 ```
 
-#### Find JIT-unfriendly code on websites
-
-No go back to the jalangi2analyses directory:
-
-
-```
-./script/jitprof-web.sh < sampler's name >
-```
-
-Existing samplers: ```non```, ```random```, ```decay```
-
-Example:
-```
-./script/jitprof-web.sh non
-```
-
-Now you can explore the web with any browser you like.
-In the browser window, use ```Alt```-```Shift```-```T``` key combination to dump
-the JITProf wanrings in the web console.
-
-**Note:** After using JITProf, type the following command to disable web proxy configuration. 
-```
-./script/jitprof-web.sh
-```
 
 ### Collect data of instrumentation overhead (with sampling)
 
