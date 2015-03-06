@@ -332,7 +332,7 @@ function process_line(line) {
     // match [****]instrument-eval-time: 5.523s
     res_array = /\[\*\*\*\*\]instrument-eval-time: (\d+(\.\d+)*)/.exec(line);
     if(res_array) {
-        currentRow.instru_eval_time += res_array[1];
+        currentRow.instru_eval_time += parseFloat(res_array[1]);
         return ;
     }
 

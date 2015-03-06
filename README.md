@@ -114,7 +114,7 @@ Example:
 ```
 
 
-### Collect data of instrumentation overhead (with sampling)
+### Measure runtime overhead (with sampling)
 
 Using hybrid sampling (i.e., sampling instrumentation on function level and sampling the analysis of instructions),
 we can reduce the overhead of JITProf by one (sometime two) order(s) of magnitude.

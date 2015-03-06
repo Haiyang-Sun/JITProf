@@ -1,5 +1,5 @@
 
-##### Run the experiment
+### Run the experiment
 
 In the github root directory of this project, use the following command:
 
@@ -14,7 +14,7 @@ Result will be saved to: ```exp/hybrid_sampling_exp/result``` directory, in whic
 warnings in this round of experiment
 
 
-##### Experiment Configuration
+### Experiment Configuration
 
 At both instruction and functional level, decaying sampling is deployed.
 
