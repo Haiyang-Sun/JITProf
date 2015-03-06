@@ -38,13 +38,13 @@ This simple change can give you 10X-20X speedup on Firefox and Chrome.
 JITProf monitors the execution of a JavaScript program and analyses its runtime behavior to pinpoint the JIT-unfriendly code location.
 
 For the previous example, JITProf will pinpoint to ```array[i] = i;``` and tells you the code is accessing a non-contiguous array
-frequently.
+frequently. Note that this is only one of those JIT-unfriendly code patterns deteted by JITProf. 
+For more details, please [read this document](docs/TR.md).
 
 ### Overall how much speedup can I get after removing JIT-unfriendly code?
 
 The speedup ranges from 1% ~ 20% on SunSpider and Google Octane benchmark.
 
-For more details, please [read this document](docs/TR.md).
 
 ### Install
 
