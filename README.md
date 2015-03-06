@@ -4,7 +4,7 @@ JITProf v1.1
 
 JITProf is a tool that tells you which part of your JavaScript code may be slow on JIT-engine. We call those slow code **JIT-unfriendly code**.
 
-### What is JIT-unfriendly code?
+#### What is JIT-unfriendly code?
 
 JIT-unfriendly code is a piece of JavaScript that is hard for the JIT-engine to do profitable optimization.
 
@@ -33,7 +33,7 @@ for(var i=0;i<10000;i++) {
 The JIT-engine will always use contiguous memory space to store the array and array access is pretty fast.
 This simple change can give you 10X-20X speedup on Firefox and Chrome.
 
-### How does JITProf work?
+#### How does JITProf work?
 
 JITProf monitors the execution of a JavaScript program and analyses its runtime behavior to pinpoint the JIT-unfriendly code location.
 
@@ -41,7 +41,7 @@ For the previous example, JITProf will pinpoint to ```array[i] = i;``` and tells
 frequently. Note that this is only one of those JIT-unfriendly code patterns deteted by JITProf. 
 For more details, please [read this document](docs/TR.md).
 
-### Overall how much speedup can I get after removing JIT-unfriendly code?
+#### Overall how much speedup after removing JIT-unfriendly code?
 
 The speedup ranges from 1% ~ 20% on SunSpider and Google Octane benchmark.
 
