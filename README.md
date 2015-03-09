@@ -63,10 +63,9 @@ Use JITProf to find JIT-unfriendly code
 
 JITProf can be used on both node.js applications and websites.
 
+All following instructions assume that the current working directory is the root direcotry of JITProf and that the main [jalangi2](https://github.com/Samsung/jalangi2) directory is a sibling directory of JITProf. This project currently supports Mac OS.
+
 #### Find JIT-unfriendly code on websites
-
-No go back to the jalangi2analyses directory:
-
 
 ```
 ./script/jitprof-web.sh [sampler's name]
@@ -101,8 +100,9 @@ Example:
 **Warning:** the following script will stash and apply a patch to the jalangi2 repository in the sibling directory of jitprof. Please make sure all changes in the Jalangi2 directory are properly saved.
 
 Run JITProf with random sampler (10% sampling rate):
+
 ```
-./script/jitprof-sample.sh <sampler name> <js program relative path without .js suffix>
+./script/jitprof-sample.sh [sampler name] [js program relative path without .js suffix]
 ```
 
 Existing samplers: ```non```, ```random```, ```decay```

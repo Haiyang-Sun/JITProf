@@ -38,6 +38,8 @@
 
 cd exp/tmp
 
+echo `pwd`/../websites/cert.pem
+
 ../../../jalangi2/scripts/mitmproxywrapper.py --cert=`pwd`/../websites/cert.pem -t -q --anticache -s "../../../jalangi2/scripts/proxy.py ../../../jalangi2/src/js/sample_analyses/ChainedAnalyses.js ../../src/js/analyses/jitprof/utils/Utils.js ../../src/js/analyses/jitprof/utils/RuntimeDB.js ../../src/js/analyses/jitprof/TrackHiddenClass.js  ../../src/js/analyses/jitprof/AccessUndefArrayElem.js ../../src/js/analyses/jitprof/SwitchArrayType.js ../../src/js/analyses/jitprof/NonContiguousArray.js ../../src/js/analyses/jitprof/BinaryOpOnUndef.js ../../src/js/analyses/jitprof/PolymorphicFunCall.js ../../src/js/analyses/jitprof/TypedArray.js ../../src/js/analyses/jitprof/sampler/""$1"".js"
 
 cd ../..
