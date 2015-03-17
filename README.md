@@ -121,6 +121,12 @@ we can reduce the overhead of JITProf by one (sometime two) order(s) of magnitud
 
 For more details and to replicate the experiment, [please go to this page](exp/hybrid_sampling_exp).
 
+
+### Micro-benchmark and experiments measuring speedup on Benchmarks
+
+Micro-benchmarks and improved benchmark programs are decoupled from the implementation of JITProf.
+Those experimental code and dataset are available in [JITProf v1.0](https://github.com/Berkeley-Correctness-Group/Jalangi-Berkeley/tree/master/src/js/analyses/jitaware).
+
 License
 -------
 

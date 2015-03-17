@@ -36,6 +36,8 @@
 # $# total number of parameters
 # $@ all the parameters will be listed
 
+rm -Rf exp/tmp/*
+mkdir exp/tmp
 cd exp/tmp
 
 echo `pwd`/../websites/cert.pem
