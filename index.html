@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>JITProf by Berkeley-Correctness-Group</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">JITProf</h1>
+      <h2 class="project-tagline">Pinpointing JIT-Unfriendly code in JavaScript</h2>
+      <a href="https://github.com/Berkeley-Correctness-Group/JITProf" class="btn">View on GitHub</a>
+      <a href="https://github.com/Berkeley-Correctness-Group/JITProf/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/Berkeley-Correctness-Group/JITProf/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="jitprof-v11" class="anchor" href="#jitprof-v11" aria-hidden="true"><span class="octicon octicon-link"></span></a>JITProf v1.1</h1>
+
+<h3>
+<a id="what-is-jitprof" class="anchor" href="#what-is-jitprof" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is JITProf?</h3>
+
+<p>JITProf is a tool that tells you which part of your JavaScript code may be slow on JIT-engine. We call those slow code <strong>JIT-unfriendly code</strong>.</p>
+
+<h4>
+<a id="what-is-jit-unfriendly-code" class="anchor" href="#what-is-jit-unfriendly-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is JIT-unfriendly code?</h4>
+
+<p>JIT-unfriendly code is a piece of JavaScript that is hard for the JIT-engine to do profitable optimization.</p>
+
+<p><strong>Example:</strong> Suppose you want to create an array containing 10k numbers with number i at index i:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-k">var</span> array <span class="pl-k">=</span> [];
+<span class="pl-k">for</span>(<span class="pl-k">var</span> i<span class="pl-k">=</span><span class="pl-c1">10000</span><span class="pl-k">-</span><span class="pl-c1">1</span>;i<span class="pl-k">&gt;=</span><span class="pl-c1">0</span>;i<span class="pl-k">--</span>) {
+    array[i] <span class="pl-k">=</span> i; <span class="pl-c">// JIT-unfriendly code</span>
+}</pre></div>
+
+<p>The first half of iterations create a non-contiguous array.
+In order to save memory, JIT-engine will use a hash-table-like representation to store the array
+in memory instead of a contiguous memory space (like in C/C++). Consequently, accessing <code>array</code> is quite slow.</p>
+
+<p>A more efficient and JIT-friendly code should initialize the array elements in asending order:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-k">var</span> array <span class="pl-k">=</span> [];
+<span class="pl-k">for</span>(<span class="pl-k">var</span> i<span class="pl-k">=</span><span class="pl-c1">0</span>;i<span class="pl-k">&lt;</span><span class="pl-c1">10000</span>;i<span class="pl-k">++</span>) {
+    array[i] <span class="pl-k">=</span> i;
+}</pre></div>
+
+<p>This time, the JIT-engine will always use contiguous memory space for array and array accessing is much faster.
+This simple change leads to 10X-20X speedup on Firefox and Chrome.</p>
+
+<p>Note that there are different JIT-unfriendly code patterns, those patterns relate to memory model, polymorphic operations, hidden classes and inline caching. More details are in our <a href="docs/TR.md">technical report</a>.</p>
+
+<h4>
+<a id="how-does-jitprof-work" class="anchor" href="#how-does-jitprof-work" aria-hidden="true"><span class="octicon octicon-link"></span></a>How does JITProf work?</h4>
+
+<p>JITProf monitors the execution of a JavaScript program and analyses its runtime behavior to pinpoint the JIT-unfriendly code location.</p>
+
+<p>For the previous example, JITProf will pinpoint to <code>array[i] = i;</code> and tells you the code is accessing a non-contiguous array
+frequently. Note that this is only one of those JIT-unfriendly code patterns deteted by JITProf. 
+For more details, please <a href="docs/TR.md">read this document</a>.</p>
+
+<h4>
+<a id="overall-how-much-speedup-after-removing-jit-unfriendly-code" class="anchor" href="#overall-how-much-speedup-after-removing-jit-unfriendly-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overall how much speedup after removing JIT-unfriendly code?</h4>
+
+<p>The speedup ranges from 1% ~ 20% on SunSpider and Google Octane benchmark.</p>
+
+<h2>
+<a id="install-jitprof" class="anchor" href="#install-jitprof" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install JITProf</h2>
+
+<p>To run JITProf with Jalangi2 on real-world websites, you need to install</p>
+
+<ul>
+<li><p><strong>jalangi2</strong> See the <a href="https://github.com/Samsung/jalangi2">Jalangi2 Repository</a>
+(Put Jalangi2 repository and this repository under the same directory.)</p></li>
+<li><p><strong>mitmproxy</strong> For more details, please read <a href="docs/mitmproxy_install.md">this document</a>.</p></li>
+</ul>
+
+<h2>
+<a id="use-jitprof-to-find-jit-unfriendly-code" class="anchor" href="#use-jitprof-to-find-jit-unfriendly-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use JITProf to find JIT-unfriendly code</h2>
+
+<p>JITProf can be used on both node.js applications and websites.</p>
+
+<p>All following instructions assume that the current working directory is the root direcotry of JITProf and that the main <a href="https://github.com/Samsung/jalangi2">jalangi2</a> directory is a sibling directory of JITProf. This project currently supports Mac OS.</p>
+
+<h4>
+<a id="find-jit-unfriendly-code-on-websites" class="anchor" href="#find-jit-unfriendly-code-on-websites" aria-hidden="true"><span class="octicon octicon-link"></span></a>Find JIT-unfriendly code on websites</h4>
+
+<pre><code>./script/jitprof-web.sh [sampler's name]
+</code></pre>
+
+<p>Existing samplers: <code>non</code>, <code>random</code>, <code>decay</code></p>
+
+<p>Now you can explore the web with any browser you like.
+In the browser window, use <code>Alt</code>-<code>Shift</code>-<code>T</code> key combination to dump
+the JITProf wanrings in the web console.</p>
+
+<p><strong>Note:</strong> After using JITProf, type the following command to disable web proxy configuration. </p>
+
+<pre><code>./script/jitprof-web.sh
+</code></pre>
+
+<h4>
+<a id="find-jit-unfriendly-code-running-on-nodejs" class="anchor" href="#find-jit-unfriendly-code-running-on-nodejs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Find JIT-unfriendly code running on node.js</h4>
+
+<pre><code>./script/jitprof.sh [js program relative path without .js suffix]
+</code></pre>
+
+<p>Example:</p>
+
+<pre><code>./script/jitprof.sh tests/jitprof/JITAwareTest
+</code></pre>
+
+<h4>
+<a id="find-jit-unfriendly-code-reduce-overhead-by-sampling" class="anchor" href="#find-jit-unfriendly-code-reduce-overhead-by-sampling" aria-hidden="true"><span class="octicon octicon-link"></span></a>Find JIT-unfriendly code (reduce overhead by sampling)</h4>
+
+<p><strong>Warning:</strong> the following script will stash and apply a patch to the jalangi2 repository in the sibling directory of jitprof. Please make sure all changes in the Jalangi2 directory are properly saved.</p>
+
+<p>Run JITProf with random sampler (10% sampling rate):</p>
+
+<pre><code>./script/jitprof-sample.sh [sampler name] [js program relative path without .js suffix]
+</code></pre>
+
+<p>Existing samplers: <code>non</code>, <code>random</code>, <code>decay</code></p>
+
+<p>Example:</p>
+
+<pre><code>./script/jitprof-sample.sh random tests/jitprof/JITAwareTest
+</code></pre>
+
+<h3>
+<a id="measure-runtime-overhead-with-sampling" class="anchor" href="#measure-runtime-overhead-with-sampling" aria-hidden="true"><span class="octicon octicon-link"></span></a>Measure runtime overhead (with sampling)</h3>
+
+<p>Using hybrid sampling (i.e., sampling instrumentation on function level and sampling the analysis of instructions),
+we can reduce the overhead of JITProf by one (sometime two) order(s) of magnitude.</p>
+
+<p>For more details and to replicate the experiment, <a href="exp/hybrid_sampling_exp">please go to this page</a>.</p>
+
+<h3>
+<a id="micro-benchmark-and-experiments-measuring-speedup-on-benchmarks" class="anchor" href="#micro-benchmark-and-experiments-measuring-speedup-on-benchmarks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Micro-benchmark and experiments measuring speedup on Benchmarks</h3>
+
+<p>Micro-benchmarks and improved benchmark programs are decoupled from the implementation of JITProf.
+Those experimental code and dataset are available in <a href="https://github.com/Berkeley-Correctness-Group/Jalangi-Berkeley/tree/master/src/js/analyses/jitaware">JITProf v1.0</a>.</p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>JITProf is distributed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License</a>.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/Berkeley-Correctness-Group/JITProf">JITProf</a> is maintained by <a href="https://github.com/Berkeley-Correctness-Group">Berkeley-Correctness-Group</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
