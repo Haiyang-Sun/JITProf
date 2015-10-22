@@ -40,7 +40,7 @@ Note that there are different JIT-unfriendly code patterns, those patterns relat
 JITProf monitors the execution of a JavaScript program and analyses its runtime behavior to pinpoint the JIT-unfriendly code location.
 
 For the previous example, JITProf will pinpoint to ```array[i] = i;``` and tells you the code is accessing a non-contiguous array
-frequently. Note that this is only one of those JIT-unfriendly code patterns deteted by JITProf. 
+frequently. Note that this is only one of those JIT-unfriendly code patterns detected by JITProf. 
 For more details, please [read this document](docs/TR.md).
 
 #### Overall how much speedup after removing JIT-unfriendly code?
