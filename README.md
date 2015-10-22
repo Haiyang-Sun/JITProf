@@ -4,6 +4,9 @@ JITProf v1.1
 
 JITProf is a tool that tells you which part of your JavaScript code may be slow on JIT-engine. We call those slow code **JIT-unfriendly code**.
 
+**Academic Resources:** [Preprint](http://www.cs.berkeley.edu/~ksen/papers/jitprof.pdf) in [ESEC/FSE'15](http://esec-fse15.dei.polimi.it/) | [Presentation Slides](http://mp.binaervarianz.de/fse2015_slides.pdf) | [Technical Report](http://www.eecs.berkeley.edu/Pubs/TechRpts/2014/EECS-2014-144.pdf) | [Bibtex](http://mp.binaervarianz.de/fse2015.html)
+
+
 #### What is JIT-unfriendly code?
 
 JIT-unfriendly code is a piece of JavaScript that is hard for the JIT-engine to do profitable optimization.
