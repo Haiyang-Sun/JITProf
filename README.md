@@ -46,6 +46,10 @@ For the previous example, JITProf will pinpoint to ```array[i] = i;``` and tells
 frequently. Note that this is only one of those JIT-unfriendly code patterns detected by JITProf. 
 For more details, please [read this document](docs/TR.md).
 
+#### Visualizing JIT-unfriendly Code
+
+There is another project focusing on visualizing the JIT-unfriendly code. For more details, see [here](https://github.com/JacksonGL/jitprof-visualization).
+
 #### Overall how much speedup after removing JIT-unfriendly code?
 
 The speedup ranges from 1% ~ 20% on SunSpider and Google Octane benchmark.
