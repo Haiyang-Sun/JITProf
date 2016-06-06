@@ -1,52 +1,30 @@
 
-#### Install mitmproxy
+This document only walks through the installation of mitmproxy on Mac OS for Dynamic analysis on JITProf and DLint. If you are using other operating system, please go to the [official document](http://docs.mitmproxy.org/en/latest/).
+
+Preparation
+-----------
+
+In terminal, first make sure that you have the latest version of ```pip``` installed ([install pip](https://pip.pypa.io/en/stable/installing/)).
+
+If you already had pip, make sure that you are using the latest version by typing the following command in the console:
 ```
-sudo easy_install pip
-pip install mitmproxy
+pip install -U pip
 ```
 
-Next update pyOpenSSL to 0.14:
-
-Download pyOpenSSL-0.14 package from here:
-https://pypi.python.org/pypi/pyOpenSSL
-
-Decompress the content of the file to the directory where the current version of pyOpenSSL is located:
-(see the following example directory):
+Next, you need to install ```pyOpenSSL``` by typing the following command in the terminal:
 ```
-/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python
+pip install pyOpenSSL
 ```
 
-The location will be nofified by running the ```mitmdump``` command:
+Install
+-------------
+
+Note that current the newer version of mitmproxy may have some problem with HTTPS protocol, so make sure that you install mitmproxy (v0.11.3) by typing the following command in the terminal:
 ```
-$ mitmdump -q --anticache -s "../scripts/proxy.py ../src/js/sample_analyses/ChainedAnalyses.js ../src/js/runtime/analysisCallbackTemplate.js"
-> You are using an outdated version of pyOpenSSL: mitmproxy requires pyOpenSSL 0.14 or greater.
-> Your pyOpenSSL 0.13 installation is located at /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/OpenSSL
+pip install mitmproxy==0.11.3
 ```
 
-in the pyOpenSSL-0.14 directory, run the following command to install the new version of pyOpenSSL:
-```
-sudo python setup.py install --user
-```
+#### Install mitmproxy certificate (important step!)
+**mitm**proxy stands for **m**an-**i**n-**t**he-**m**iddle proxy. HTTPS and SSL are designed to prevent man-in-the-middle-attack. To make mitmproxy capable of intercepting and changing the content in HTTPS, mitmproxy contains a full implementation of Certificate Authority to issue certificate for changed content (In Jalangi, it is the instrumented code). Therefore, we need to manually add mitmproxy's CA system as a legal certificate issuer on our computer.
 
-#### Install mitmproxy certificate
-Details can be found at this location:
-http://mitmproxy.org/doc/ssl.html
-
-More details:
-
-In the jalangi2 directory, input the following commands to generate ```cert.pen``` file:
-```
-$ openssl genrsa -out cert.key 8192
-$ openssl req -new -x509 -key cert.key -out cert.crt
-    (Specify the mitm domain as Common Name, e.g. *.google.com)
-$ cat cert.key cert.crt > cert.pem
-$ mitmproxy --cert=cert.pem
-```
-For the last command, after running it, the console will be occupied.
-Open the browser your want to add certificate, surf a few web pages
-and back to the console and enter 'q' and 'yes'.
-
-Now you are good to go:
-```
-../scripts/mitmproxywrapper.py -t -q --anticache -s "../scripts/proxy.py ../src/js/sample_analyses/ChainedAnalyses.js ../src/js/runtime/analysisCallbackTemplate.js"
-```
+To make sure that mitmproxy works with HTTPS requests, following the instructions in [this document](https://github.com/ksen007/jalangi2analyses/blob/master/doc/mitmproxy-install.pdf).
