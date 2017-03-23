@@ -38,7 +38,10 @@
 
 # run JITProf with sampling
 echo "analyzing with JITProf..."
-GRAALNODE="/Users/haiyang/Documents/WorkSpace/Graal/graalvm-0.18-dk/bin/node"
+if [ -z ${GRAALNODE+x} ]; then
+    echo "GRAALNODE is not set, use default node"
+    GRAALNODE="node"
+fi
 NODE="${GRAALNODE} -J-Dgraal.TraceTruffleCompilation=false -J-Dtruffle.new.profiling=true"$2
 analyses=""
 while IFS='' read -r line || [[ -n "$line" ]]; do

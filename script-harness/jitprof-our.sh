@@ -36,17 +36,13 @@
 # $# total number of parameters
 # $@ all the parameters will be listed
 
-# instrument code
-echo "instrumenting ""$1".js"..."
-node ../src/js/commands/esnstrument_cli.js --inlineIID "$1".js
 # run JITProf with sampling
 echo "analyzing with JITProf..."
 if [ -z ${GRAALNODE+x} ]; then
     echo "GRAALNODE is not set, use default node"
     GRAALNODE="node"
 fi
-NODE="${GRAALNODE} -J-Dgraal.TraceTruffleCompilation=false -J-Dtruffle.new.profiling=false"
-
+NODE="${GRAALNODE} -J-Dtruffle.customizedJITProf=true -J-Dgraal.TraceTruffleCompilation=false -J-Dtruffle.new.profiling=true"$2
 analyses=""
 while IFS='' read -r line || [[ -n "$line" ]]; do
     if [[ $line = \#* ]]; then
@@ -60,4 +56,4 @@ done < analyses;
 $NODE ../src/js/commands/direct.js \
 $analyses \
 ../octane/harness.js \
-"$1"_jalangi_
+"$1"
