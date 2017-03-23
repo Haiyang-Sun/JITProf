@@ -42,6 +42,7 @@ node ../src/js/commands/esnstrument_cli.js --inlineIID "$1".js
 # run JITProf with sampling
 echo "analyzing with JITProf..."
 NODE="node"
+
 analyses=""
 while IFS='' read -r line || [[ -n "$line" ]]; do
     if [[ $line = \#* ]]; then
@@ -51,6 +52,8 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
       echo $line
     fi
 done < analyses;
+
 $NODE ../src/js/commands/direct.js \
 $analyses \
-"$1"_jalangi_.js
+../octane/harness.js \
+"$1"_jalangi_
