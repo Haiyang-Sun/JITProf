@@ -62,6 +62,7 @@
 
         this.endExecution = function () {
             this.printResult();
+            db = new RuntimeDB();
         };
 
         this.printResult = function () {

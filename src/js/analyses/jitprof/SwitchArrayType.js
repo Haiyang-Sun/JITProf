@@ -100,6 +100,7 @@
 
         this.endExecution = function () {
             this.printResult();
+            db = new RuntimeDB();
         };
 
 

@@ -491,6 +491,8 @@
                     console.log('[x]\t' + iidToLocation(iid) + '\t' + failArraySource[iid]);
                 }
             }
+
+            arraydb = {};
         }
     }
 
