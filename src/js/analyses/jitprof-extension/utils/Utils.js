@@ -65,10 +65,10 @@
 
     }
 
-    sandbox.getShadowObject = function (val) {
-      if(inGraalNode){
-        return ShadowSpace.getShadowObject(val);
-      }
+    if(inGraalNode){
+        sandbox.getShadowObject = ShadowSpace.getShadowObject;
+    }else {
+      sandbox.getShadowObject = function (val) {
         var value;
         createShadowObject(val);
         var type = typeof val;
@@ -78,7 +78,8 @@
             value = undefined;
         }
         return value;
-    };
+      };
+    }
 
     var util = {
         ISNAN:isNaN,
